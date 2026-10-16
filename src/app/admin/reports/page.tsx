@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   FileSpreadsheet, 
   Send, 
@@ -12,6 +12,7 @@ import {
   Eye
 } from 'lucide-react';
 import { generateReportData, renderReportEmailHtml, ReportData } from '@/lib/reporting';
+import { feedbackStore } from '@/lib/feedback/store';
 
 export default function ReportsManagementPage() {
   const [reportType, setReportType] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -19,9 +20,11 @@ export default function ReportsManagementPage() {
   const [testResult, setTestResult] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [reportData, setReportData] = useState<ReportData | null>(null);
+  const [targetEmail, setTargetEmail] = useState<string>('tung.trandt2413883@hcmut.edu.vn');
 
-  useEffect(() => {
+  React.useEffect(() => {
     setReportData(generateReportData(reportType));
+    setTargetEmail(feedbackStore.getRecipientEmails());
   }, [reportType]);
 
   const handleRunReportNow = async () => {
@@ -29,7 +32,7 @@ export default function ReportsManagementPage() {
     setTestResult(null);
 
     try {
-      const res = await fetch(`/api/cron/reports?type=${reportType}&secret=anthoidong_cron_secret_2026`);
+      const res = await fetch(`/api/cron/reports?type=${reportType}&secret=anthoidong_cron_secret_2026&to=${encodeURIComponent(targetEmail)}`);
       const data = await res.json();
       setTestResult(data);
     } catch (err: unknown) {
@@ -50,7 +53,7 @@ export default function ReportsManagementPage() {
             Quản trị Báo cáo định kỳ & Gửi Email
           </h1>
           <p className="text-xs text-stone-500 mt-1">
-            Tổng hợp dữ liệu theo giờ Việt Nam và gửi email tự động tới Lãnh đạo Ủy ban MTTQ xã
+            Tổng hợp dữ liệu theo giờ Việt Nam và gửi email tự động tới Lãnh đạo Ủy ban MTTQ Phường Diên Hồng
           </p>
         </div>
 
@@ -66,7 +69,7 @@ export default function ReportsManagementPage() {
           <button
             onClick={handleRunReportNow}
             disabled={loading}
-            className="px-4 py-2 bg-[#8B0000] hover:bg-red-900 text-white text-xs font-bold rounded-lg transition shadow flex items-center gap-2 disabled:opacity-50"
+            className="px-4 py-2 bg-[#B22222] hover:bg-red-900 text-white text-xs font-bold rounded-lg transition shadow flex items-center gap-2 disabled:opacity-50"
           >
             {loading ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
@@ -78,6 +81,23 @@ export default function ReportsManagementPage() {
         </div>
       </div>
 
+      {/* Tùy chỉnh nhanh địa chỉ email thử nghiệm */}
+      <div className="bg-white p-4 rounded-xl border border-stone-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2">
+          <Mail className="w-4 h-4 text-[#B22222]" />
+          <span className="font-bold text-stone-800">Email nhận báo cáo thử nghiệm:</span>
+        </div>
+        <div className="flex-1 max-w-md">
+          <input
+            type="email"
+            value={targetEmail}
+            onChange={(e) => setTargetEmail(e.target.value)}
+            placeholder="tung.trandt2413883@hcmut.edu.vn"
+            className="w-full px-3 py-1.5 rounded-lg border border-stone-300 font-mono text-xs focus:outline-none focus:ring-1 focus:ring-[#B22222]"
+          />
+        </div>
+      </div>
+
       {testResult && (
         <div className={`p-4 rounded-xl border text-xs ${testResult.success ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
           <div className="font-bold flex items-center gap-2 mb-1">
@@ -86,6 +106,7 @@ export default function ReportsManagementPage() {
           </div>
           <div>Mã chống trùng (Idempotency Key): <strong>{testResult.idempotencyKey}</strong></div>
           <div>Số bản ghi tổng hợp: <strong>{testResult.totalRecords}</strong></div>
+          <div>Người nhận: <strong>{testResult.recipients?.join(', ') || targetEmail}</strong></div>
           <div className="mt-1 text-[11px] text-stone-600">
             Trạng thái gửi thư: {testResult.emailResult?.success ? 'Đã gửi thành công qua Resend' : `Thông báo: ${testResult.emailResult?.error}`}
           </div>
@@ -100,7 +121,7 @@ export default function ReportsManagementPage() {
             onClick={() => setReportType(type)}
             className={`p-5 rounded-xl border-2 cursor-pointer transition ${
               reportType === type
-                ? 'border-[#8B0000] bg-red-50/40 shadow-sm'
+                ? 'border-[#B22222] bg-red-50/40 shadow-sm'
                 : 'border-stone-200 bg-white hover:border-stone-300'
             }`}
           >
@@ -115,7 +136,7 @@ export default function ReportsManagementPage() {
                 ? 'Gửi lúc 18:00 hằng ngày tổng hợp phản ánh mới tiếp nhận và cần lưu ý.'
                 : type === 'weekly'
                 ? 'Gửi sáng thứ Hai hàng tuần tổng hợp tiến độ và tồn đọng.'
-                : 'Gửi ngày mùng 1 đầu tháng đánh giá tỷ lệ xử lý và phân bổ theo ấp.'}
+                : 'Gửi ngày mùng 1 đầu tháng đánh giá tỷ lệ xử lý trên địa bàn phường.'}
             </p>
           </div>
         ))}
@@ -124,13 +145,13 @@ export default function ReportsManagementPage() {
       {/* Tóm tắt số liệu kỳ đã chọn */}
       <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-4">
         <h2 className="text-sm font-bold text-stone-900 border-b pb-3 flex items-center gap-2">
-          <FileSpreadsheet className="w-4 h-4 text-[#8B0000]" />
+          <FileSpreadsheet className="w-4 h-4 text-[#B22222]" />
           Dữ liệu kết xuất kỳ: {reportData?.periodLabel || 'Đang nạp...'}
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
           <div className="p-3 bg-stone-50 rounded-lg">
-            <div className="text-xl font-extrabold text-[#8B0000]">{reportData?.totalReceived ?? 0}</div>
+            <div className="text-xl font-extrabold text-[#B22222]">{reportData?.totalReceived ?? 0}</div>
             <div className="text-xs text-stone-500 mt-0.5">Tiếp nhận</div>
           </div>
           <div className="p-3 bg-stone-50 rounded-lg">

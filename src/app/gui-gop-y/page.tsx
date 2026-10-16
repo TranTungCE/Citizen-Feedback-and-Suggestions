@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   Send, 
@@ -8,7 +8,6 @@ import {
   Copy, 
   Check, 
   AlertCircle, 
-  Lock, 
   EyeOff, 
   MapPin, 
   Calendar, 
@@ -18,10 +17,12 @@ import {
   Mail,
   ShieldAlert
 } from 'lucide-react';
-import { DEFAULT_CATEGORIES } from '@/lib/feedback/store';
+import { feedbackStore } from '@/lib/feedback/store';
 import { submitFeedbackAction } from '@/app/actions/feedback';
+import { FeedbackCategory } from '@/types';
 
 export default function SubmitFeedbackPage() {
+  const [categories, setCategories] = useState<FeedbackCategory[]>([]);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submittedCode, setSubmittedCode] = useState<string | null>(null);
@@ -31,7 +32,7 @@ export default function SubmitFeedbackPage() {
 
   const [formData, setFormData] = useState({
     title: '',
-    category_id: DEFAULT_CATEGORIES[0].id,
+    category_id: '',
     location_text: '',
     incident_at: '',
     priority: 'normal' as 'low' | 'normal' | 'high' | 'urgent',
@@ -42,6 +43,14 @@ export default function SubmitFeedbackPage() {
     agree_privacy: false,
     honeypot: ''
   });
+
+  useEffect(() => {
+    const list = feedbackStore.getActiveCategories();
+    setCategories(list);
+    if (list.length > 0) {
+      setFormData((prev) => ({ ...prev, category_id: list[0].id }));
+    }
+  }, []);
 
   const handleCopyCode = () => {
     if (submittedCode) {
@@ -84,7 +93,6 @@ export default function SubmitFeedbackPage() {
     }
   };
 
-  // NẾU ĐÃ GỬI THÀNH CÔNG: HIỂN THỊ MÀN HÌNH XÁC NHẬN VÀ CẤP MÃ
   if (submittedCode) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-12">
@@ -101,15 +109,14 @@ export default function SubmitFeedbackPage() {
             Cảm ơn bạn đã gửi ý kiến đóng góp!
           </h1>
           <p className="text-stone-600 text-sm max-w-lg mx-auto mb-8">
-            Ủy ban Mặt trận Tổ quốc Việt Nam xã An Thới Đông đã ghi nhận thông tin của bạn. Dưới đây là mã tiếp nhận chính thức để bạn theo dõi kết quả.
+            Ủy ban Mặt trận Tổ quốc Việt Nam Phường Diên Hồng đã ghi nhận thông tin của bạn. Dưới đây là mã tiếp nhận chính thức để bạn theo dõi kết quả.
           </p>
 
-          {/* Hộp mã tiếp nhận */}
-          <div className="bg-stone-50 border-2 border-dashed border-[#8B0000] p-6 rounded-xl max-w-md mx-auto mb-6">
+          <div className="bg-stone-50 border-2 border-dashed border-[#B22222] p-6 rounded-xl max-w-md mx-auto mb-6">
             <div className="text-xs text-stone-500 uppercase tracking-wider font-semibold mb-1">
               Mã tiếp nhận của bạn
             </div>
-            <div className="text-3xl font-mono font-black text-[#8B0000] tracking-wider mb-3">
+            <div className="text-3xl font-mono font-black text-[#B22222] tracking-wider mb-3">
               {submittedCode}
             </div>
             <button
@@ -138,13 +145,13 @@ export default function SubmitFeedbackPage() {
             </div>
             <p>• Vui lòng lưu lại mã tiếp nhận trên để tra cứu tiến độ xử lý.</p>
             <p>• Việc tiếp nhận thông tin không đồng nghĩa với việc sự việc đã được giải quyết xong ngay lập tức.</p>
-            <p>• Cán bộ MTTQ sẽ tiến hành thẩm tra và phối hợp với cơ quan có thẩm quyền xử lý theo quy định.</p>
+            <p>• Cán bộ MTTQ Phường Diên Hồng sẽ tiến hành thẩm tra và phối hợp với cơ quan có thẩm quyền xử lý theo quy định.</p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href={`/tra-cuu?code=${submittedCode}`}
-              className="w-full sm:w-auto px-6 py-3 bg-[#8B0000] text-white font-bold rounded-lg hover:bg-red-900 transition shadow"
+              className="w-full sm:w-auto px-6 py-3 bg-[#B22222] text-white font-bold rounded-lg hover:bg-red-900 transition shadow"
             >
               Tra cứu trạng thái ngay
             </Link>
@@ -163,11 +170,11 @@ export default function SubmitFeedbackPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#8B0000]">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#B22222]">
           Gửi góp ý, kiến nghị & phản ánh
         </h1>
         <p className="text-stone-600 text-sm mt-1">
-          Ủy ban Mặt trận Tổ quốc Việt Nam xã An Thới Đông trân trọng tiếp nhận ý kiến đóng góp của người dân
+          Ủy ban Mặt trận Tổ quốc Việt Nam Phường Diên Hồng trân trọng tiếp nhận ý kiến đóng góp của người dân
         </p>
       </div>
 
@@ -180,9 +187,9 @@ export default function SubmitFeedbackPage() {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* CHỌN CHẾ ĐỘ GỬI */}
-        <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+        <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-xs">
           <h2 className="text-base font-bold text-stone-900 mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#8B0000]"></span>
+            <span className="w-2 h-2 rounded-full bg-[#B22222]"></span>
             Hình thức cung cấp danh tính
           </h2>
 
@@ -190,7 +197,7 @@ export default function SubmitFeedbackPage() {
             <label
               className={`p-4 rounded-lg border-2 cursor-pointer flex items-start gap-3 transition ${
                 !isAnonymous
-                  ? 'border-[#8B0000] bg-red-50/50'
+                  ? 'border-[#B22222] bg-red-50/50'
                   : 'border-stone-200 hover:border-stone-300'
               }`}
             >
@@ -199,7 +206,7 @@ export default function SubmitFeedbackPage() {
                 name="identity_mode"
                 checked={!isAnonymous}
                 onChange={() => setIsAnonymous(false)}
-                className="mt-1 text-[#8B0000] focus:ring-[#8B0000]"
+                className="mt-1 text-[#B22222] focus:ring-[#B22222]"
               />
               <div>
                 <div className="font-bold text-sm text-stone-900">Có thông tin liên hệ</div>
@@ -212,7 +219,7 @@ export default function SubmitFeedbackPage() {
             <label
               className={`p-4 rounded-lg border-2 cursor-pointer flex items-start gap-3 transition ${
                 isAnonymous
-                  ? 'border-[#8B0000] bg-red-50/50'
+                  ? 'border-[#B22222] bg-red-50/50'
                   : 'border-stone-200 hover:border-stone-300'
               }`}
             >
@@ -221,7 +228,7 @@ export default function SubmitFeedbackPage() {
                 name="identity_mode"
                 checked={isAnonymous}
                 onChange={() => setIsAnonymous(true)}
-                className="mt-1 text-[#8B0000] focus:ring-[#8B0000]"
+                className="mt-1 text-[#B22222] focus:ring-[#B22222]"
               />
               <div>
                 <div className="font-bold text-sm text-stone-900 flex items-center gap-1.5">
@@ -237,9 +244,9 @@ export default function SubmitFeedbackPage() {
         </div>
 
         {/* THÔNG TIN NỘI DUNG PHẢN ÁNH */}
-        <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-6">
+        <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-xs space-y-6">
           <h2 className="text-base font-bold text-stone-900 flex items-center gap-2 border-b pb-3">
-            <FileText className="w-5 h-5 text-[#8B0000]" />
+            <FileText className="w-5 h-5 text-[#B22222]" />
             Nội dung phản ánh, góp ý
           </h2>
 
@@ -253,8 +260,8 @@ export default function SubmitFeedbackPage() {
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="Ví dụ: Đèn đường chiếu sáng tại đường An Thới Đông bị hỏng"
-                className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#8B0000] text-sm"
+                placeholder="Ví dụ: Đèn đường chiếu sáng tại đường Thành Thái bị hỏng"
+                className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#B22222] text-sm"
               />
               {fieldErrors.title && (
                 <p className="text-xs text-red-600 mt-1">{fieldErrors.title[0]}</p>
@@ -268,9 +275,9 @@ export default function SubmitFeedbackPage() {
               <select
                 value={formData.category_id}
                 onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#8B0000] text-sm bg-white"
+                className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#B22222] text-sm bg-white"
               >
-                {DEFAULT_CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
                   </option>
@@ -285,7 +292,7 @@ export default function SubmitFeedbackPage() {
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-                className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#8B0000] text-sm bg-white"
+                className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#B22222] text-sm bg-white"
               >
                 <option value="normal">Bình thường / Theo định kỳ</option>
                 <option value="high">Ưu tiên cao / Cần lưu ý sớm</option>
@@ -295,7 +302,7 @@ export default function SubmitFeedbackPage() {
 
             <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-stone-700 mb-1">
-                Địa điểm xảy ra sự việc (Ấp, tuyến đường, số nhà/mốc nhận biết) <span className="text-red-500">*</span>
+                Địa điểm xảy ra sự việc (Khu phố, số nhà, ngõ/hẻm, tuyến đường) <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <MapPin className="w-4 h-4 text-stone-400 absolute left-3 top-3" />
@@ -304,8 +311,8 @@ export default function SubmitFeedbackPage() {
                   required
                   value={formData.location_text}
                   onChange={(e) => setFormData({ ...formData, location_text: e.target.value })}
-                  placeholder="Ví dụ: Cạnh trường Tiểu học An Thới Đông, Ấp An Nghĩa"
-                  className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#8B0000] text-sm"
+                  placeholder="Ví dụ: Đoạn trước số 1A Thành Thái, Phường Diên Hồng"
+                  className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#B22222] text-sm"
                 />
               </div>
               {fieldErrors.location_text && (
@@ -323,7 +330,7 @@ export default function SubmitFeedbackPage() {
                   type="datetime-local"
                   value={formData.incident_at}
                   onChange={(e) => setFormData({ ...formData, incident_at: e.target.value })}
-                  className="w-full pl-9 pr-4 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#8B0000] text-sm"
+                  className="w-full pl-9 pr-4 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#B22222] text-sm"
                 />
               </div>
             </div>
@@ -338,7 +345,7 @@ export default function SubmitFeedbackPage() {
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 placeholder="Mô tả cụ thể diễn biến, thực trạng và đề xuất giải pháp xử lý..."
-                className="w-full px-4 py-3 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#8B0000] text-sm leading-relaxed"
+                className="w-full px-4 py-3 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#B22222] text-sm leading-relaxed"
               ></textarea>
               {fieldErrors.content && (
                 <p className="text-xs text-red-600 mt-1">{fieldErrors.content[0]}</p>
@@ -347,11 +354,11 @@ export default function SubmitFeedbackPage() {
           </div>
         </div>
 
-        {/* THÔNG TIN LIÊN HỆ (KHI KHÔNG ẨN DANH) */}
+        {/* THÔNG TIN LIÊN HỆ */}
         {!isAnonymous && (
-          <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-4">
+          <div className="bg-white p-6 rounded-xl border border-stone-200 shadow-xs space-y-4">
             <h2 className="text-base font-bold text-stone-900 flex items-center gap-2 border-b pb-3">
-              <User className="w-5 h-5 text-[#8B0000]" />
+              <User className="w-5 h-5 text-[#B22222]" />
               Thông tin liên hệ người gửi
             </h2>
 
@@ -364,7 +371,7 @@ export default function SubmitFeedbackPage() {
                   type="text"
                   value={formData.submitter_name}
                   onChange={(e) => setFormData({ ...formData, submitter_name: e.target.value })}
-                  placeholder="Nguyễn Văn A"
+                  placeholder="Nguyễn Văn An"
                   className="w-full px-3 py-2 rounded-lg border border-stone-300 text-sm"
                 />
               </div>
@@ -383,9 +390,6 @@ export default function SubmitFeedbackPage() {
                     className="w-full pl-9 pr-3 py-2 rounded-lg border border-stone-300 text-sm"
                   />
                 </div>
-                {fieldErrors.submitter_phone && (
-                  <p className="text-xs text-red-600 mt-1">{fieldErrors.submitter_phone[0]}</p>
-                )}
               </div>
 
               <div>
@@ -407,7 +411,7 @@ export default function SubmitFeedbackPage() {
           </div>
         )}
 
-        {/* HONEYPOT CHỐNG SPAM BOT (Ẩn với người dùng) */}
+        {/* HONEYPOT */}
         <div className="hidden" aria-hidden="true">
           <input
             type="text"
@@ -418,7 +422,7 @@ export default function SubmitFeedbackPage() {
           />
         </div>
 
-        {/* CAM KẾT & XÁC NHẬN */}
+        {/* CAM KẾT */}
         <div className="bg-stone-50 p-6 rounded-xl border border-stone-200 space-y-4">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
@@ -426,20 +430,20 @@ export default function SubmitFeedbackPage() {
               required
               checked={formData.agree_privacy}
               onChange={(e) => setFormData({ ...formData, agree_privacy: e.target.checked })}
-              className="mt-1 w-4 h-4 text-[#8B0000] rounded border-stone-300 focus:ring-[#8B0000]"
+              className="mt-1 w-4 h-4 text-[#B22222] rounded border-stone-300 focus:ring-[#B22222]"
             />
             <span className="text-xs text-stone-700 leading-relaxed">
-              Tôi cam đoan những nội dung phản ánh, góp ý nêu trên là đúng sự thật và chịu trách nhiệm trước pháp luật về tính xác thực của thông tin cung cấp. Tôi đồng ý để Ủy ban MTTQ Việt Nam xã An Thới Đông sử dụng thông tin này phục vụ công tác xác minh và xử lý.
+              Tôi cam đoan những nội dung phản ánh, góp ý nêu trên là đúng sự thật và chịu trách nhiệm trước pháp luật về tính xác thực của thông tin cung cấp. Tôi đồng ý để Ủy ban MTTQ Việt Nam Phường Diên Hồng sử dụng thông tin này phục vụ công tác xác minh và xử lý.
             </span>
           </label>
         </div>
 
-        {/* NÚT SUBMIT */}
+        {/* SUBMIT */}
         <div className="text-center pt-2">
           <button
             type="submit"
             disabled={submitting}
-            className="w-full sm:w-auto px-10 py-3.5 bg-[#8B0000] text-white font-bold text-base rounded-lg hover:bg-red-900 transition shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 mx-auto"
+            className="w-full sm:w-auto px-10 py-3.5 bg-[#B22222] text-white font-bold text-base rounded-lg hover:bg-red-900 transition shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 mx-auto"
           >
             {submitting ? (
               <>

@@ -5,94 +5,104 @@ import { LogoSvg } from './LogoSvg';
 
 export function Footer() {
   return (
-    <footer className="bg-red-950 text-white text-sm mt-20 border-t-4 border-amber-400">
+    <footer className="bg-stone-900 text-stone-300 text-sm mt-20 border-t-4 border-[#B22222]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Thông tin đơn vị */}
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-0.5 shrink-0 shadow">
-                <LogoSvg className="w-8 h-8" />
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+          {/* Cột 1: Thông tin cơ quan Phường Diên Hồng */}
+          <div className="md:col-span-5 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 bg-white rounded-full flex items-center justify-center p-1 shrink-0 shadow-sm border border-stone-200">
+                <LogoSvg className="w-9 h-9" />
               </div>
-              <h3 className="text-white font-bold text-base leading-snug">
-                Ủy ban Mặt trận Tổ quốc Việt Nam<br/>
-                <span className="text-amber-300">xã An Thới Đông</span>
-              </h3>
+              <div>
+                <div className="text-[11px] uppercase tracking-wider font-bold text-amber-400">
+                  Ủy ban Mặt trận Tổ quốc Việt Nam
+                </div>
+                <h3 className="text-white font-extrabold text-base sm:text-lg">
+                  Phường Diên Hồng, TP. Hồ Chí Minh
+                </h3>
+              </div>
             </div>
-            <p className="text-red-100 text-xs sm:text-sm mb-4 leading-relaxed font-normal">
-              Cổng tiếp nhận ý kiến, hiến kế và phản ánh của Nhân dân phục vụ công tác giám sát, phản biện và xây dựng chính quyền địa phương vững mạnh.
+
+            <p className="text-stone-400 text-xs sm:text-sm leading-relaxed">
+              Cổng tiếp nhận ý kiến đóng góp, phản ánh và kiến nghị của Nhân dân nhằm xây dựng địa bàn phường văn minh, hiện đại, an toàn và nghĩa tình.
             </p>
-            <div className="space-y-2.5 text-xs sm:text-sm text-red-100">
+
+            <div className="space-y-2.5 text-xs text-stone-300 pt-1">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
-                <span>Số 313 đường An Thới Đông, ấp An Hòa 1, xã An Thới Đông, huyện Cần Giờ, TP. Hồ Chí Minh</span>
+                <span>Số 1A Thành Thái (góc đường 3 Tháng 2), Phường Diên Hồng, Thành phố Hồ Chí Minh</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>028 3874 0123</span>
+                <span>028 3865 0123</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>mattran.anthoidong@tphcm.gov.vn</span>
+                <span>mttq.phuongdienhong@tphcm.gov.vn</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Thứ Hai - Thứ Sáu: 07:30 - 17:00</span>
+                <span>Thứ Hai - Thứ Sáu: 07:30 - 11:30 | 13:00 - 17:00</span>
               </div>
             </div>
           </div>
 
-          {/* Liên kết tiện ích */}
-          <div>
-            <h3 className="text-amber-300 font-bold text-base mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
-              Chức năng & Tiện ích
-            </h3>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-red-100">
+          {/* Cột 2: Danh mục liên kết tiện ích */}
+          <div className="md:col-span-3 space-y-3">
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider border-b border-stone-800 pb-2">
+              Liên kết Tiện ích
+            </h4>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-stone-400">
               <li>
-                <Link href="/gui-gop-y" className="hover:text-amber-300 transition">
+                <Link href="/gui-gop-y" className="hover:text-amber-400 transition">
                   • Gửi phản ánh, kiến nghị mới
                 </Link>
               </li>
               <li>
-                <Link href="/tra-cuu" className="hover:text-amber-300 transition">
-                  • Tra cứu tiến độ giải quyết bằng mã tiếp nhận
+                <Link href="/tra-cuu" className="hover:text-amber-400 transition">
+                  • Tra cứu tiến độ giải quyết
                 </Link>
               </li>
               <li>
-                <Link href="/huong-dan" className="hover:text-amber-300 transition">
-                  • Hướng dẫn quy trình gửi và xử lý thông tin
+                <Link href="/huong-dan" className="hover:text-amber-400 transition">
+                  • Hướng dẫn quy trình gửi ý kiến
                 </Link>
               </li>
               <li>
-                <Link href="/chinh-sach-bao-mat" className="hover:text-amber-300 transition">
-                  • Chính sách bảo vệ dữ liệu cá nhân & quyền riêng tư
+                <Link href="/chinh-sach-bao-mat" className="hover:text-amber-400 transition">
+                  • Chính sách bảo vệ dữ liệu công dân
                 </Link>
               </li>
               <li>
-                <Link href="/dieu-khoan-su-dung" className="hover:text-amber-300 transition">
-                  • Điều khoản sử dụng dịch vụ tiếp nhận
+                <Link href="/dieu-khoan-su-dung" className="hover:text-amber-400 transition">
+                  • Điều khoản sử dụng hệ thống
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Lưu ý phạm vi */}
-          <div className="bg-red-900/60 p-5 rounded-xl border border-red-800/80">
-            <h3 className="text-amber-300 font-bold text-sm mb-2 flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 text-amber-400" />
-              Lưu ý về phạm vi tiếp nhận
-            </h3>
-            <p className="text-xs text-red-100 leading-relaxed">
-              Website do Ủy ban MTTQ Việt Nam xã An Thới Đông vận hành để tiếp nhận ý kiến của Nhân dân trên địa bàn xã. Website không thay thế Cổng 1022 TP.HCM, không thay thế việc gửi đơn tố tụng hình sự, khiếu nại tố cáo theo luật định. Trong tình huống khẩn cấp, người dân hãy gọi các đầu số 113, 114, 115 hoặc Công an xã.
-            </p>
+          {/* Cột 3: Khung lưu ý về thẩm quyền và tiếp nhận */}
+          <div className="md:col-span-4">
+            <div className="bg-stone-800/80 p-5 rounded-xl border border-stone-700/70 space-y-2">
+              <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                <ShieldAlert className="w-4 h-4 shrink-0" />
+                <span>Phạm vi & Thẩm quyền tiếp nhận</span>
+              </div>
+              <p className="text-xs text-stone-400 leading-relaxed">
+                Hệ thống do Ủy ban MTTQ Việt Nam Phường Diên Hồng vận hành phục vụ công tác giám sát và phối hợp chính quyền địa phương giải quyết kiến nghị của bà con nhân dân. Trong các tình huống khẩn cấp về an ninh trật tự hoặc y tế, vui lòng liên hệ ngay 113, 114, 115 hoặc Công an Phường Diên Hồng (Số 592 Bà Hạt).
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Bản quyền cập nhật: Đoàn Thanh niên - Hội Sinh viên Trường Đại học Bách khoa - ĐHQG-HCM */}
-        <div className="border-t border-red-900 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-red-200">
+        {/* Chân trang bản quyền */}
+        <div className="border-t border-stone-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500">
           <div>
             © Đoàn Thanh niên - Hội Sinh viên Trường Đại học Bách khoa - ĐHQG-HCM
+          </div>
+          <div className="mt-2 sm:mt-0 text-stone-600">
+            Hệ thống Cổng Tiếp Nhận Phản Ánh Trực Tuyến
           </div>
         </div>
       </div>

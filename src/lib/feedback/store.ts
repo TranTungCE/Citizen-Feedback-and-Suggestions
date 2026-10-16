@@ -1,91 +1,137 @@
 import { FeedbackItem, FeedbackCategory, FeedbackHistory, STATUS_LABELS, PRIORITY_LABELS } from '@/types';
 export { STATUS_LABELS, PRIORITY_LABELS };
 
-// Danh mục mặc định chuẩn hóa theo yêu cầu
+// Danh mục mặc định chuẩn hóa theo đơn vị Phường Diên Hồng
 export const DEFAULT_CATEGORIES: FeedbackCategory[] = [
   {
     id: 'c1000000-0000-0000-0000-000000000001',
-    name: 'Hạ tầng, giao thông và chiếu sáng',
+    name: 'Hạ tầng đô thị, giao thông & chiếu sáng',
     slug: 'ha-tang-giao-thong',
-    description: 'Đường sá, cầu cống, biển báo, đèn chiếu sáng nông thôn',
+    description: 'Đường sá, vỉa hè, nắp cống, biển báo, đèn chiếu sáng đô thị, hẻm dân cư',
     sort_order: 1,
     is_active: true
   },
   {
     id: 'c1000000-0000-0000-0000-000000000002',
-    name: 'Môi trường, rác thải và vệ sinh',
+    name: 'Vệ sinh môi trường & rác thải sinh hoạt',
     slug: 'mo-truong-ve-sinh',
-    description: 'Xả rác, ô nhiễm kênh rạch, thu gom rác thải sinh hoạt',
+    description: 'Thu gom rác thải, điểm tập kết rác tự phát, thoát nước, ô nhiễm tiếng ồn',
     sort_order: 2,
     is_active: true
   },
   {
     id: 'c1000000-0000-0000-0000-000000000003',
-    name: 'An sinh xã hội và đời sống Nhân dân',
-    slug: 'an-sinh-xa-hoi',
-    description: 'Chính sách hỗ trợ hộ nghèo, khó khăn, việc làm, đời sống',
+    name: 'Trật tự lòng lề đường & an toàn đô thị',
+    slug: 'an-ninh-trat-tu',
+    description: 'Lấn chiếm vỉa hè kinh doanh, trật tự buôn bán, an toàn sinh hoạt khu phố',
     sort_order: 3,
     is_active: true
   },
   {
     id: 'c1000000-0000-0000-0000-000000000004',
-    name: 'Trật tự, an toàn và cộng đồng',
-    slug: 'an-ninh-trat-tu',
-    description: 'Tiếng ồn, an toàn sinh hoạt cộng đồng, buôn bán lấn chiếm lề đường',
+    name: 'An sinh xã hội & chăm lo đời sống',
+    slug: 'an-sinh-xa-hoi',
+    description: 'Chính sách hỗ trợ gia đình khó khăn, người cao tuổi, bảo hiểm y tế, việc làm',
     sort_order: 4,
     is_active: true
   },
   {
     id: 'c1000000-0000-0000-0000-000000000005',
-    name: 'Thủ tục hành chính và phục vụ',
+    name: 'Thủ tục hành chính & thái độ phục vụ',
     slug: 'thu-tuc-hanh-chinh',
-    description: 'Thái độ phục vụ, quy trình giải quyết hồ sơ tại bộ phận một cửa',
+    description: 'Quy trình giải quyết hồ sơ công dân, dịch vụ công trực tuyến, tinh thần phục vụ',
     sort_order: 5,
     is_active: true
   },
   {
     id: 'c1000000-0000-0000-0000-000000000006',
-    name: 'Công tác Mặt trận và phong trào',
+    name: 'Công tác Mặt trận & xây dựng đời sống văn hóa',
     slug: 'mat-tran-phong-trao',
-    description: 'Cuộc vận động Toàn dân đoàn kết, hiến kế phong trào địa phương',
+    description: 'Cuộc vận động Toàn dân đoàn kết, hiến kế phong trào khu dân cư văn minh',
     sort_order: 6,
     is_active: true
   },
   {
     id: 'c1000000-0000-0000-0000-000000000007',
-    name: 'Góp ý, kiến nghị khác',
+    name: 'Ý kiến, kiến nghị và hiến kế khác',
     slug: 'y-kien-khac',
-    description: 'Các vấn đề đời sống xã hội khác trên địa bàn xã An Thới Đông',
+    description: 'Các vấn đề đời sống xã hội khác trên địa bàn Phường Diên Hồng',
     sort_order: 7,
     is_active: true
   }
 ];
 
-// In-memory / Mock store cho môi trường kiểm thử khi chưa kết nối Supabase
 class MemoryFeedbackStore {
   private feedbackList: FeedbackItem[] = [];
   private historyList: FeedbackHistory[] = [];
+  private categories: FeedbackCategory[] = [];
+  private recipientEmails: string = 'tung.trandt2413883@hcmut.edu.vn';
 
   constructor() {
+    this.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
     this.seedInitial();
+  }
+
+  // Quản lý danh mục lĩnh vực động
+  getCategories(): FeedbackCategory[] {
+    return [...this.categories].sort((a, b) => a.sort_order - b.sort_order);
+  }
+
+  getActiveCategories(): FeedbackCategory[] {
+    return this.categories.filter((c) => c.is_active).sort((a, b) => a.sort_order - b.sort_order);
+  }
+
+  addCategory(name: string, description: string): FeedbackCategory {
+    const newCat: FeedbackCategory = {
+      id: 'cat_' + Math.random().toString(36).substring(2, 10),
+      name,
+      slug: name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      description,
+      is_active: true,
+      sort_order: this.categories.length + 1
+    };
+    this.categories.push(newCat);
+    return newCat;
+  }
+
+  updateCategory(id: string, updates: Partial<FeedbackCategory>): FeedbackCategory | null {
+    const index = this.categories.findIndex((c) => c.id === id);
+    if (index === -1) return null;
+    this.categories[index] = { ...this.categories[index], ...updates };
+    return this.categories[index];
+  }
+
+  deleteCategory(id: string): boolean {
+    const index = this.categories.findIndex((c) => c.id === id);
+    if (index === -1) return false;
+    this.categories.splice(index, 1);
+    return true;
+  }
+
+  getRecipientEmails(): string {
+    return this.recipientEmails;
+  }
+
+  setRecipientEmails(emails: string): void {
+    this.recipientEmails = emails;
   }
 
   private seedInitial() {
     const item1: FeedbackItem = {
       id: 'f1000000-0000-0000-0000-000000000001',
-      tracking_code: 'ATD-261016-8921',
-      title: 'Đèn chiếu sáng công cộng tại đường An Thới Đông bị hỏng',
-      content: 'Đoạn đường gần ngã ba An Nghĩa có 2 bóng đèn đường bị chập chờn và tắt hẳn 3 ngày nay, gây khó khăn cho bà con đi lại vào buổi tối.',
-      category_id: 'c1000000-0000-0000-0000-000000000001',
-      category: DEFAULT_CATEGORIES[0],
-      location_text: 'Ấp An Nghĩa, gần ngã ba đường An Thới Đông',
+      tracking_code: 'DH-261016-8921',
+      title: 'Đèn chiếu sáng công cộng tại hẻm đường Thành Thái bị hỏng',
+      content: 'Bóng đèn chiếu sáng công cộng đoạn giao hẻm đường Thành Thái bị chập chờn và tắt hẳn 3 ngày nay, gây khó khăn cho bà con và người già đi lại vào buổi tối.',
+      category_id: this.categories[0]?.id,
+      category: this.categories[0],
+      location_text: 'Khu phố 3, hẻm đường Thành Thái, Phường Diên Hồng',
       incident_at: '2026-10-14T19:00:00+07:00',
       priority: 'normal',
       status: 'resolved',
       is_anonymous: false,
-      submitter_name: 'Nguyễn Văn A',
+      submitter_name: 'Nguyễn Văn An',
       submitter_phone: '0901234567',
-      official_response: 'Ủy ban MTTQ xã đã chuyển phản ánh đến Ban Quản lý hạ tầng xã. Đơn vị kỹ thuật đã tiến hành thay mới bóng đèn vào ngày 15/10/2026.',
+      official_response: 'Ủy ban MTTQ Phường đã chuyển phản ánh đến Bộ phận Đô thị và Môi trường. Đơn vị kỹ thuật đã tiến hành thay mới bóng đèn vào ngày 15/10/2026.',
       official_response_at: '2026-10-15T15:30:00+07:00',
       submitted_at: '2026-10-14T20:15:00+07:00',
       updated_at: '2026-10-15T15:30:00+07:00',
@@ -94,12 +140,12 @@ class MemoryFeedbackStore {
 
     const item2: FeedbackItem = {
       id: 'f1000000-0000-0000-0000-000000000002',
-      tracking_code: 'ATD-261016-5412',
-      title: 'Kiến nghị kiểm tra điểm tập kết rác thải tự phát bờ kênh',
-      content: 'Khu vực giáp rạch có một số hộ vứt rác thải bừa bãi gây mùi hôi và ô nhiễm nguồn nước kênh rạch.',
-      category_id: 'c1000000-0000-0000-0000-000000000002',
-      category: DEFAULT_CATEGORIES[1],
-      location_text: 'Tổ 5, Ấp Rạch Lá, xã An Thới Đông',
+      tracking_code: 'DH-261016-5412',
+      title: 'Kiến nghị kiểm tra điểm tập kết rác thải tự phát gần chợ',
+      content: 'Khu vực gần ngã tư có một số hộ vứt rác thải bừa bãi sau giờ thu gom gây mùi hôi và mất mỹ quan đô thị.',
+      category_id: this.categories[1]?.id,
+      category: this.categories[1],
+      location_text: 'Đoạn đường 3 Tháng 2, Phường Diên Hồng',
       priority: 'high',
       status: 'processing',
       is_anonymous: true,
@@ -123,7 +169,7 @@ class MemoryFeedbackStore {
         feedback_id: item1.id,
         old_status: 'new',
         new_status: 'processing',
-        note: 'Chuyển Ban Quản lý hạ tầng xã kiểm tra',
+        note: 'Chuyển Bộ phận Quản lý đô thị Phường kiểm tra',
         is_public: true,
         created_at: '2026-10-15T08:00:00+07:00'
       },
@@ -132,7 +178,7 @@ class MemoryFeedbackStore {
         feedback_id: item1.id,
         old_status: 'processing',
         new_status: 'resolved',
-        note: 'Đã hoàn tất thay mới đèn chiếu sáng',
+        note: 'Đã hoàn tất thay mới đèn chiếu sáng công cộng',
         is_public: true,
         created_at: '2026-10-15T15:30:00+07:00'
       },
@@ -149,7 +195,7 @@ class MemoryFeedbackStore {
         feedback_id: item2.id,
         old_status: 'new',
         new_status: 'processing',
-        note: 'Đang phối hợp Tổ tự quản môi trường ấp Rạch Lá kiểm tra thực địa',
+        note: 'Đang phối hợp Ban điều hành Khu phố kiểm tra thực địa',
         is_public: true,
         created_at: '2026-10-16T09:45:00+07:00'
       }
@@ -212,7 +258,6 @@ class MemoryFeedbackStore {
     };
     this.feedbackList.unshift(newItem);
 
-    // Thêm lịch sử khởi tạo
     this.historyList.push({
       id: 'h' + Math.random().toString(36).substring(2, 11),
       feedback_id: newItem.id,
@@ -280,7 +325,6 @@ class MemoryFeedbackStore {
   }
 }
 
-// Global singleton instance
 const globalStore = global as unknown as { __feedbackStore?: MemoryFeedbackStore };
 if (!globalStore.__feedbackStore) {
   globalStore.__feedbackStore = new MemoryFeedbackStore();

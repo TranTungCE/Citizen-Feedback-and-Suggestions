@@ -65,20 +65,20 @@ export function renderReportEmailHtml(data: ReportData): string {
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto; color: #222; line-height: 1.5;">
-      <div style="background-color: #8B0000; color: #ffffff; padding: 20px 24px; border-radius: 8px 8px 0 0; text-align: center;">
-        <h3 style="margin: 0; font-size: 14px; color: #FFD700; text-transform: uppercase;">Ủy ban MTTQ Việt Nam Xã An Thới Đông</h3>
+      <div style="background-color: #B22222; color: #ffffff; padding: 20px 24px; border-radius: 8px 8px 0 0; text-align: center;">
+        <h3 style="margin: 0; font-size: 13px; color: #FFD700; text-transform: uppercase;">Ủy ban MTTQ Việt Nam Phường Diên Hồng</h3>
         <h1 style="margin: 8px 0 0; font-size: 20px;">BÁO CÁO TỔNG HỢP GÓP Ý, PHẢN ÁNH ${typeName}</h1>
         <p style="margin: 4px 0 0; font-size: 13px; color: #f0f0f0;">Thời gian: ${data.periodLabel}</p>
       </div>
 
       <div style="padding: 24px; border: 1px solid #e0e0e0; border-top: none; background: #ffffff; border-radius: 0 0 8px 8px;">
-        <h2 style="font-size: 16px; color: #8B0000; border-bottom: 2px solid #8B0000; padding-bottom: 6px; margin-top: 0;">
+        <h2 style="font-size: 15px; color: #B22222; border-bottom: 2px solid #B22222; padding-bottom: 6px; margin-top: 0;">
           1. Số liệu tổng quan kỳ báo cáo
         </h2>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
           <tr style="background: #f9f9f9;">
             <td style="padding: 10px; border: 1px solid #eee;"><strong>Tổng phản ánh tiếp nhận:</strong></td>
-            <td style="padding: 10px; border: 1px solid #eee; text-align: right; font-weight: bold; font-size: 16px; color: #8B0000;">${data.totalReceived}</td>
+            <td style="padding: 10px; border: 1px solid #eee; text-align: right; font-weight: bold; font-size: 16px; color: #B22222;">${data.totalReceived}</td>
           </tr>
           <tr>
             <td style="padding: 10px; border: 1px solid #eee;"><strong>Đã có kết quả giải quyết:</strong></td>
@@ -90,7 +90,7 @@ export function renderReportEmailHtml(data: ReportData): string {
           </tr>
         </table>
 
-        <h2 style="font-size: 16px; color: #8B0000; border-bottom: 2px solid #8B0000; padding-bottom: 6px;">
+        <h2 style="font-size: 15px; color: #B22222; border-bottom: 2px solid #B22222; padding-bottom: 6px;">
           2. Phân loại theo Lĩnh vực
         </h2>
         <ul style="padding-left: 20px; font-size: 14px; margin-bottom: 20px;">
@@ -99,7 +99,7 @@ export function renderReportEmailHtml(data: ReportData): string {
           `).join('')}
         </ul>
 
-        <h2 style="font-size: 16px; color: #8B0000; border-bottom: 2px solid #8B0000; padding-bottom: 6px;">
+        <h2 style="font-size: 15px; color: #B22222; border-bottom: 2px solid #B22222; padding-bottom: 6px;">
           3. Danh sách phản ánh cần lưu ý
         </h2>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px;">
@@ -114,7 +114,7 @@ export function renderReportEmailHtml(data: ReportData): string {
           <tbody>
             ${data.highlightItems.map(item => `
               <tr>
-                <td style="padding: 8px; border: 1px solid #ddd; font-family: monospace; font-weight: bold; color: #8B0000;">${item.code}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; font-family: monospace; font-weight: bold; color: #B22222;">${item.code}</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">${item.title}</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">${item.location}</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">${item.status}</td>
@@ -123,8 +123,8 @@ export function renderReportEmailHtml(data: ReportData): string {
           </tbody>
         </table>
 
-        <div style="margin-top: 24px; padding: 16px; background: #fffbe6; border: 1px solid #ffe58f; border-radius: 6px; font-size: 12px; color: #873800;">
-          * Báo cáo này được tự động kết xuất từ cơ sở dữ liệu Hệ thống tiếp nhận góp ý An Thới Đông theo lịch định kỳ. Dữ liệu chỉ dùng phục vụ công tác điều hành nội bộ của Ủy ban MTTQ xã và các cơ quan liên quan.
+        <div style="margin-top: 24px; padding: 14px; background: #fffbe6; border: 1px solid #ffe58f; border-radius: 6px; font-size: 12px; color: #873800;">
+          * Báo cáo này được tự động kết xuất từ cơ sở dữ liệu Cổng tiếp nhận góp ý Phường Diên Hồng theo lịch định kỳ. Dữ liệu chỉ dùng phục vụ công tác điều hành nội bộ của Ủy ban MTTQ Phường và các cơ quan liên quan.
         </div>
       </div>
     </div>

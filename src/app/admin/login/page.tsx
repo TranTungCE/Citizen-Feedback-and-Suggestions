@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck, Lock, User, AlertCircle, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Lock, User, AlertCircle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { LogoSvg } from '@/components/LogoSvg';
 
 export default function AdminLoginPage() {
@@ -18,14 +18,15 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError(null);
 
-    // Xác thực tài khoản mặc định bảo mật admin/admin123
+    // Xác thực tài khoản mặc định admin/admin123
     setTimeout(() => {
       if (
         (username.trim() === 'admin' && password === 'admin123') ||
+        (username.trim().toLowerCase() === 'admin@dienhong.gov.vn' && password === 'admin123') ||
         (username.trim().toLowerCase() === 'admin@anthoidong.gov.vn' && password === 'admin123')
       ) {
-        // Lưu cookie phiên đăng nhập
         document.cookie = "atd_admin_session=authenticated; path=/; max-age=86400";
+        localStorage.setItem("atd_admin_last_activity", Date.now().toString());
         router.push('/admin');
       } else {
         setError('Tài khoản hoặc mật khẩu không chính xác.');
@@ -42,7 +43,7 @@ export default function AdminLoginPage() {
             <LogoSvg className="w-12 h-12" />
           </div>
           <span className="text-[11px] font-bold text-[#B22222] uppercase tracking-wider block">
-            Ủy ban MTTQ Việt Nam Xã An Thới Đông
+            Ủy ban MTTQ Việt Nam Phường Diên Hồng
           </span>
           <h1 className="text-2xl font-black text-stone-900 tracking-tight">
             Đăng nhập Quản trị Cán bộ
@@ -85,22 +86,27 @@ export default function AdminLoginPage() {
             <div className="relative">
               <Lock className="w-4 h-4 text-stone-400 absolute left-3 top-3" />
               <input
-                type={showPassword ? 'text' : 'password'}
+                type="text"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Nhập mật khẩu"
+                style={{
+                  WebkitTextSecurity: showPassword ? 'none' : 'disc'
+                } as React.CSSProperties}
                 className="w-full pl-9 pr-10 py-2 text-xs rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#B22222] focus:border-transparent"
                 autoComplete="current-password"
+                spellCheck={false}
               />
               <button
                 type="button"
+                tabIndex={-1}
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-stone-400 hover:text-stone-600 transition"
+                className="absolute right-3 top-2.5 text-stone-400 hover:text-stone-700 p-0.5 transition"
                 title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
               >
                 {showPassword ? (
-                  <EyeOff className="w-4 h-4" />
+                  <EyeOff className="w-4 h-4 text-[#B22222]" />
                 ) : (
                   <Eye className="w-4 h-4" />
                 )}

@@ -12,10 +12,9 @@ import {
   HeartHandshake,
   ShieldAlert,
   Users2,
-  HelpCircle,
-  Sparkles
+  HelpCircle
 } from 'lucide-react';
-import { feedbackStore, DEFAULT_CATEGORIES } from '@/lib/feedback/store';
+import { feedbackStore } from '@/lib/feedback/store';
 import { LogoSvg } from '@/components/LogoSvg';
 
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
@@ -30,30 +29,29 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
 
 export default function HomePage() {
   const metrics = feedbackStore.getMetrics();
+  const categories = feedbackStore.getActiveCategories();
 
   return (
     <div className="space-y-16 pb-8">
       {/* 1. HERO SECTION TRẮNG - ĐỎ TRANG TRỌNG & ANIMATION */}
       <section className="relative overflow-hidden bg-gradient-to-b from-red-50/60 via-white to-red-50/30 py-14 sm:py-20 border-b border-red-100">
-        {/* Vòng trang trí chuyển động nhẹ ở nền */}
         <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-red-100/40 rounded-full blur-3xl -z-10 pointer-events-none animate-pulse-subtle"></div>
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 animate-fade-in-up">
-          {/* Huy hiệu cơ quan có Logo SVG nổi bật */}
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white border border-red-200 text-[#B22222] text-xs sm:text-sm font-bold shadow-sm animate-float">
             <LogoSvg className="w-6 h-6 shrink-0" />
-            <span>Ủy ban Mặt trận Tổ quốc Việt Nam xã An Thới Đông</span>
+            <span>Ủy ban Mặt trận Tổ quốc Việt Nam Phường Diên Hồng</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-stone-900 leading-[1.2]">
             Lắng nghe ý kiến <span className="text-[#B22222]">Nhân dân</span> <br />
             <span className="text-stone-800 text-2xl sm:text-4xl font-extrabold mt-2 inline-block">
-              Chung tay xây dựng quê hương An Thới Đông
+              Chung tay xây dựng Phường Diên Hồng văn minh, hiện đại
             </span>
           </h1>
 
           <p className="text-stone-600 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed font-normal">
-            Kênh trực tuyến tiếp nhận các ý kiến đóng góp, hiến kế, kiến nghị và phản ánh về đời sống, môi trường, hạ tầng và dân sinh trên địa bàn xã. Giao diện trực quan, dễ thao tác cho mọi lứa tuổi.
+            Kênh trực tuyến tiếp nhận các ý kiến đóng góp, hiến kế, kiến nghị và phản ánh về đô thị, môi trường, hạ tầng và dân sinh trên địa bàn Phường Diên Hồng, Thành phố Hồ Chí Minh.
           </p>
 
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -76,7 +74,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. SỐ LIỆU THỰC TẾ TRÊN NỀN TRẮNG ĐỎ NỔI BẬT */}
+      {/* 2. SỐ LIỆU HOẠT ĐỘNG THỰC TẾ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200">
           <div className="text-center p-3 border-r last:border-0 border-stone-100 group">
@@ -98,7 +96,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. CÁC NHÓM LĨNH VỰC TIẾP NHẬN */}
+      {/* 3. CÁC NHÓM LĨNH VỰC TIẾP NHẬN (ĐỘNG TỪ STORE) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="text-xs font-bold uppercase tracking-wider text-[#B22222] bg-red-50 px-3 py-1 rounded-full border border-red-200">
@@ -113,7 +111,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {DEFAULT_CATEGORIES.map((cat) => {
+          {categories.map((cat) => {
             const IconComponent = CATEGORY_ICONS[cat.slug] || HelpCircle;
             return (
               <div 
@@ -165,7 +163,7 @@ export default function HomePage() {
               </div>
               <h3 className="font-bold text-stone-900 text-base mb-2">Người dân gửi ý kiến</h3>
               <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
-                Người dân điền biểu mẫu trực tuyến, mô tả rõ nội dung sự việc và địa điểm tại ấp/tuyến đường.
+                Người dân điền biểu mẫu trực tuyến, mô tả rõ nội dung sự việc và địa chỉ cụ thể tại khu phố, tuyến đường.
               </p>
             </div>
 
@@ -175,7 +173,7 @@ export default function HomePage() {
               </div>
               <h3 className="font-bold text-stone-900 text-base mb-2">Cấp mã tiếp nhận</h3>
               <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
-                Hệ thống cấp ngay mã định danh (ví dụ ATD-261016-XXXX). Người dân dùng mã để tra cứu bất cứ lúc nào.
+                Hệ thống cấp ngay mã định danh (ví dụ DH-261016-XXXX). Người dân dùng mã để tra cứu bất cứ lúc nào.
               </p>
             </div>
 
@@ -185,7 +183,7 @@ export default function HomePage() {
               </div>
               <h3 className="font-bold text-stone-900 text-base mb-2">Phân loại & Xử lý</h3>
               <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
-                Cán bộ MTTQ tiếp nhận, xác minh thực tế và phối hợp đơn vị chuyên môn xử lý dứt điểm.
+                Cán bộ MTTQ tiếp nhận, xác minh thực tế và phối hợp bộ phận chuyên môn phường xử lý dứt điểm.
               </p>
             </div>
 

@@ -4,7 +4,6 @@ import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
-// Sử dụng font Inter hỗ trợ hoàn hảo bộ ký tự tiếng Việt với các dấu thanh
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
   display: 'swap',
@@ -12,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Cổng tiếp nhận góp ý, phản ánh xã An Thới Đông',
-  description: 'Cổng tiếp nhận ý kiến đóng góp, phản ánh của Nhân dân phục vụ Ủy ban Mặt trận Tổ quốc Việt Nam xã An Thới Đông, huyện Cần Giờ, TP. Hồ Chí Minh.',
+  title: 'Cổng tiếp nhận góp ý, phản ánh Phường Diên Hồng',
+  description: 'Cổng tiếp nhận ý kiến đóng góp, phản ánh của Nhân dân phục vụ Ủy ban Mặt trận Tổ quốc Việt Nam Phường Diên Hồng, Thành phố Hồ Chí Minh.',
 };
 
 export default function RootLayout({

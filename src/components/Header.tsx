@@ -15,7 +15,7 @@ export function Header() {
             </div>
             <div>
               <div className="text-[11px] sm:text-xs uppercase tracking-wider text-amber-200 font-semibold leading-tight">
-                Ủy ban Mặt trận Tổ quốc Việt Nam xã An Thới Đông
+                Ủy ban Mặt trận Tổ quốc Việt Nam Phường Diên Hồng
               </div>
               <div className="text-base sm:text-lg font-extrabold text-white group-hover:text-amber-100 transition tracking-tight">
                 Cổng Tiếp Nhận Góp Ý & Phản Ánh
@@ -23,7 +23,7 @@ export function Header() {
             </div>
           </Link>
 
-          {/* Desktop Navigation - Đã ẩn nút admin ra ngoài giao diện công khai */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6 text-sm font-semibold">
             <Link href="/" className="text-white hover:text-amber-300 transition py-1">
               Trang chủ

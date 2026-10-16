@@ -10,38 +10,75 @@ import {
   Settings, 
   LogOut,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  ShieldCheck
 } from 'lucide-react';
 import { LogoSvg } from '@/components/LogoSvg';
+
+const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000; // 15 phút không thao tác thì tự động đăng xuất
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  // Kiểm tra trạng thái đăng nhập
+  const handleLogout = () => {
+    document.cookie = "atd_admin_session=; path=/; max-age=0";
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("atd_admin_last_activity");
+    }
+    router.push('/admin/login');
+  };
+
+  // Kiểm tra trạng thái đăng nhập và cơ chế tự động logout khi không hoạt động
   useEffect(() => {
     if (pathname === '/admin/login') {
       setIsAuthenticated(true);
       return;
     }
 
-    const hasSession = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('atd_admin_session='));
+    const checkSession = () => {
+      const hasSession = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('atd_admin_session='));
 
-    if (!hasSession) {
-      setIsAuthenticated(false);
-      router.push('/admin/login');
-    } else {
+      const lastActivity = localStorage.getItem("atd_admin_last_activity");
+      const now = Date.now();
+
+      if (!hasSession || (lastActivity && now - parseInt(lastActivity, 10) > INACTIVITY_TIMEOUT_MS)) {
+        setIsAuthenticated(false);
+        handleLogout();
+        return false;
+      }
+      return true;
+    };
+
+    if (checkSession()) {
       setIsAuthenticated(true);
+      localStorage.setItem("atd_admin_last_activity", Date.now().toString());
     }
-  }, [pathname, router]);
 
-  const handleLogout = () => {
-    document.cookie = "atd_admin_session=; path=/; max-age=0";
-    router.push('/admin/login');
-  };
+    // Lắng nghe sự kiện người dùng hoạt động để reset bộ đếm thời gian
+    const updateActivity = () => {
+      localStorage.setItem("atd_admin_last_activity", Date.now().toString());
+    };
+
+    window.addEventListener('mousemove', updateActivity);
+    window.addEventListener('keydown', updateActivity);
+    window.addEventListener('click', updateActivity);
+
+    // Kiểm tra định kỳ mỗi phút
+    const interval = setInterval(() => {
+      checkSession();
+    }, 60000);
+
+    return () => {
+      window.removeEventListener('mousemove', updateActivity);
+      window.removeEventListener('keydown', updateActivity);
+      window.removeEventListener('click', updateActivity);
+      clearInterval(interval);
+    };
+  }, [pathname, router]);
 
   if (pathname === '/admin/login') {
     return <>{children}</>;
@@ -69,7 +106,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             </div>
             <div>
               <div className="text-[10px] uppercase font-bold text-[#B22222] tracking-wider leading-none">
-                MTTQ Xã An Thới Đông
+                MTTQ Phường Diên Hồng
               </div>
               <div className="text-sm font-black text-stone-900 mt-1">
                 Khu Vực Cán Bộ
@@ -119,7 +156,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           >
             <div className="flex items-center gap-3">
               <Settings className="w-4 h-4 text-stone-400 group-hover:text-[#B22222]" />
-              <span>Cấu hình danh mục & SLA</span>
+              <span>Tùy chỉnh Lĩnh vực & Cài đặt</span>
             </div>
             <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
           </Link>
