@@ -1,9 +1,51 @@
-import React from 'react';
+'use client';
+
+import React, { Suspense } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { MapPin, Phone, Mail, Clock, ShieldAlert } from 'lucide-react';
 import { LogoSvg } from './LogoSvg';
 
-export function Footer() {
+function FooterContent() {
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith('/admin');
+
+  // NẾU Ở KHU VỰC TRANG ADMIN: FOOTER GỌN GÀNG ĐÚNG CHUẨN YÊU CẦU
+  if (isAdminRoute) {
+    return (
+      <footer className="bg-stone-50 text-stone-700 text-xs border-t border-stone-200 py-3.5 px-6 mt-auto">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+          {/* (logo) Ủy ban Mặt trận Tổ quốc Việt Nam Phường Diên Hồng, TP. Hồ Chí Minh */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-0.5 shadow-xs border border-red-200 shrink-0">
+              <LogoSvg className="w-6 h-6" />
+            </div>
+            <div className="leading-tight">
+              <div className="text-[10px] uppercase font-bold text-[#B22222]">
+                Ủy ban Mặt trận Tổ quốc Việt Nam
+              </div>
+              <div className="text-xs font-extrabold text-stone-900">
+                Phường Diên Hồng, TP. Hồ Chí Minh
+              </div>
+            </div>
+          </div>
+
+          {/* © Đoàn Thanh niên - Hội Sinh viên Trường Đại học Bách khoa - ĐHQG-HCM */}
+          {/* Cổng Tiếp Nhận Góp Ý & Phản Ánh Trực Tuyến */}
+          <div className="space-y-0.5 sm:text-right">
+            <div className="font-semibold text-stone-700">
+              © Đoàn Thanh niên - Hội Sinh viên Trường Đại học Bách khoa - ĐHQG-HCM
+            </div>
+            <div className="text-[11px] text-stone-500">
+              Cổng Tiếp Nhận Góp Ý & Phản Ánh Trực Tuyến
+            </div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
+  // NẾU Ở KHU VỰC CÔNG KHAI DÀNH CHO NGƯỜI DÂN
   return (
     <footer className="bg-stone-50 text-stone-700 text-sm mt-20 border-t-2 border-red-200 shadow-inner">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -107,5 +149,13 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+export function Footer() {
+  return (
+    <Suspense fallback={null}>
+      <FooterContent />
+    </Suspense>
   );
 }
