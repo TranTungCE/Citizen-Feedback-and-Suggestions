@@ -146,9 +146,15 @@ export async function createFeedback(input: CreateFeedbackInput): Promise<Create
       // Khi biến môi trường Supabase chưa được cấu hình (ví dụ môi trường dev nội bộ)
       // Nếu chưa cấu hình Supabase trên production, báo lỗi rõ ràng không được báo thành công ảo
       if (process.env.NODE_ENV === 'production') {
+        const hasUrl = Boolean((process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim());
+        const hasKey = Boolean((process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim());
+        const missing = [];
+        if (!hasUrl) missing.push('NEXT_PUBLIC_SUPABASE_URL');
+        if (!hasKey) missing.push('SUPABASE_SERVICE_ROLE_KEY');
+
         return {
           success: false,
-          error: 'Cơ sở dữ liệu máy chủ chưa được cấu hình (Thiếu biến môi trường NEXT_PUBLIC_SUPABASE_URL hoặc SUPABASE_SERVICE_ROLE_KEY). Vui lòng liên hệ quản trị viên.'
+          error: `Cơ sở dữ liệu máy chủ chưa nhận diện được biến môi trường: [${missing.join(', ')}]. Hãy kiểm tra tab Environment Variables trên Vercel và đảm bảo đã Redeploy.`
         };
       }
       break;
