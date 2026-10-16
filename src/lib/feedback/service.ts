@@ -329,6 +329,23 @@ export async function getAdminFeedbackList(options?: {
           category: Array.isArray(item.category) ? item.category[0] : item.category
         }));
       }
+
+      if (error) {
+        console.warn('Lỗi query feedback kèm join, thử query đơn bảng:', error);
+        // Fallback query đơn bảng feedback nếu join gặp sự cố quan hệ foreign key
+        const simpleQuery = supabase
+          .from('feedback')
+          .select('*')
+          .order('submitted_at', { ascending: false });
+        const { data: simpleData, error: simpleErr } = await simpleQuery;
+        if (!simpleErr && simpleData) {
+          const categories = await getActiveCategories();
+          return simpleData.map((item: any) => ({
+            ...item,
+            category: categories.find(c => c.id === item.category_id)
+          }));
+        }
+      }
     } catch (e) {
       console.error('Lỗi khi fetch danh sách admin từ Supabase:', e);
     }

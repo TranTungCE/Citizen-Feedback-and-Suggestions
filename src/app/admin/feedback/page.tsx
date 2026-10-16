@@ -14,14 +14,14 @@ import {
 } from 'lucide-react';
 import { feedbackStore, STATUS_LABELS, PRIORITY_LABELS, DEFAULT_CATEGORIES } from '@/lib/feedback/store';
 import { formatVietnameseDateTime } from '@/lib/utils';
-import { FeedbackStatus, FeedbackPriority } from '@/types';
+import { FeedbackStatus, FeedbackPriority, FeedbackItem } from '@/types';
 
 export default function FeedbackManagementPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
-  const [rawItems, setRawItems] = useState(feedbackStore.getAll());
+  const [rawItems, setRawItems] = useState<FeedbackItem[]>([]);
   const [categories, setCategories] = useState<any[]>(DEFAULT_CATEGORIES);
   const [loading, setLoading] = useState(true);
 
