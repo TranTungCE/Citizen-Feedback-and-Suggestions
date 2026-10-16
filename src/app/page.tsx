@@ -14,7 +14,7 @@ import {
   Users2,
   HelpCircle
 } from 'lucide-react';
-import { feedbackStore } from '@/lib/feedback/store';
+import { getFeedbackMetrics, getActiveCategories } from '@/lib/feedback/service';
 import { LogoSvg } from '@/components/LogoSvg';
 
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
@@ -27,9 +27,9 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'y-kien-khac': HelpCircle
 };
 
-export default function HomePage() {
-  const metrics = feedbackStore.getMetrics();
-  const categories = feedbackStore.getActiveCategories();
+export default async function HomePage() {
+  const metrics = await getFeedbackMetrics();
+  const categories = await getActiveCategories();
 
   return (
     <div className="space-y-16 pb-8">

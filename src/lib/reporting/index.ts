@@ -1,5 +1,6 @@
 import { feedbackStore, STATUS_LABELS } from '@/lib/feedback/store';
 import { formatVietnameseDate } from '@/lib/utils';
+import { getAdminFeedbackList, getFeedbackMetrics } from '@/lib/feedback/service';
 
 export interface ReportData {
   periodType: 'daily' | 'weekly' | 'monthly';
@@ -17,9 +18,9 @@ export interface ReportData {
   }>;
 }
 
-export function generateReportData(type: 'daily' | 'weekly' | 'monthly'): ReportData {
-  const all = feedbackStore.getAll();
-  const metrics = feedbackStore.getMetrics();
+export async function generateReportData(type: 'daily' | 'weekly' | 'monthly'): Promise<ReportData> {
+  const all = await getAdminFeedbackList();
+  const metrics = await getFeedbackMetrics();
   
   const today = new Date();
   let periodLabel = '';

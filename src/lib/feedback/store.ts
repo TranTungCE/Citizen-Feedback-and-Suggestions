@@ -69,7 +69,10 @@ class MemoryFeedbackStore {
 
   constructor() {
     this.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
-    this.seedInitial();
+    // Chỉ nạp dữ liệu mẫu khi đang chạy development cục bộ và không có cấu hình production
+    if (process.env.NODE_ENV === 'development' && process.env.ENABLE_DEMO_SEED === 'true') {
+      this.seedInitial();
+    }
   }
 
   // Quản lý danh mục lĩnh vực động

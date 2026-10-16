@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Settings, Save, CheckCircle2, ShieldCheck, Plus, Trash2, Edit3, X, Check } from 'lucide-react';
 import { feedbackStore } from '@/lib/feedback/store';
 import { FeedbackCategory } from '@/types';
+import { addCategoryAction, updateCategoryAction, deleteCategoryAction } from '@/app/actions/admin';
 
 export default function AdminSettingsPage() {
   const [allowAnonymous, setAllowAnonymous] = useState(true);
@@ -11,6 +12,8 @@ export default function AdminSettingsPage() {
   const [recipientEmails, setRecipientEmails] = useState('tung.trandt2413883@hcmut.edu.vn');
   const [saved, setSaved] = useState(false);
   const [categories, setCategories] = useState<FeedbackCategory[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // State cho thêm mới category
   const [showAddModal, setShowAddModal] = useState(false);
@@ -22,8 +25,25 @@ export default function AdminSettingsPage() {
   const [editName, setEditName] = useState('');
   const [editDesc, setEditDesc] = useState('');
 
+  const loadCategories = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/categories');
+      const json = await res.json();
+      if (json.success && json.data) {
+        setCategories(json.data);
+      } else {
+        setCategories(feedbackStore.getCategories());
+      }
+    } catch {
+      setCategories(feedbackStore.getCategories());
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setCategories(feedbackStore.getCategories());
+    loadCategories();
     setRecipientEmails(feedbackStore.getRecipientEmails());
   }, []);
 
@@ -34,14 +54,20 @@ export default function AdminSettingsPage() {
     setTimeout(() => setSaved(false), 3000);
   };
 
-  const handleAddCategory = (e: React.FormEvent) => {
+  const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCatName.trim()) return;
-    feedbackStore.addCategory(newCatName.trim(), newCatDesc.trim());
-    setCategories(feedbackStore.getCategories());
-    setNewCatName('');
-    setNewCatDesc('');
-    setShowAddModal(false);
+    setErrorMessage(null);
+
+    const res = await addCategoryAction(newCatName.trim(), newCatDesc.trim());
+    if (res.success) {
+      setNewCatName('');
+      setNewCatDesc('');
+      setShowAddModal(false);
+      await loadCategories();
+    } else {
+      setErrorMessage(res.error || 'Lỗi khi thêm lĩnh vực.');
+    }
   };
 
   const startEditCategory = (c: FeedbackCategory) => {
@@ -50,24 +76,39 @@ export default function AdminSettingsPage() {
     setEditDesc(c.description || '');
   };
 
-  const handleSaveEdit = (id: string) => {
-    feedbackStore.updateCategory(id, {
+  const handleSaveEdit = async (id: string) => {
+    setErrorMessage(null);
+    const res = await updateCategoryAction(id, {
       name: editName,
       description: editDesc
     });
-    setCategories(feedbackStore.getCategories());
-    setEditingId(null);
+    if (res.success) {
+      setEditingId(null);
+      await loadCategories();
+    } else {
+      setErrorMessage(res.error || 'Lỗi khi sửa danh mục.');
+    }
   };
 
-  const handleToggleActive = (id: string, current: boolean) => {
-    feedbackStore.updateCategory(id, { is_active: !current });
-    setCategories(feedbackStore.getCategories());
+  const handleToggleActive = async (id: string, current: boolean) => {
+    setErrorMessage(null);
+    const res = await updateCategoryAction(id, { is_active: !current });
+    if (res.success) {
+      await loadCategories();
+    } else {
+      setErrorMessage(res.error || 'Lỗi khi cập nhật trạng thái.');
+    }
   };
 
-  const handleDeleteCategory = (id: string) => {
+  const handleDeleteCategory = async (id: string) => {
     if (confirm('Bạn có chắc chắn muốn xóa lĩnh vực này khỏi danh sách tiếp nhận?')) {
-      feedbackStore.deleteCategory(id);
-      setCategories(feedbackStore.getCategories());
+      setErrorMessage(null);
+      const res = await deleteCategoryAction(id);
+      if (res.success) {
+        await loadCategories();
+      } else {
+        setErrorMessage(res.error || 'Lỗi khi xóa lĩnh vực.');
+      }
     }
   };
 
@@ -84,8 +125,15 @@ export default function AdminSettingsPage() {
 
       {saved && (
         <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-semibold flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           Đã lưu cấu hình hệ thống thành công!
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="p-3 bg-red-50 border border-red-200 text-red-800 rounded-lg text-xs font-semibold flex items-center gap-2">
+          <X className="w-4 h-4 text-red-600 shrink-0" />
+          {errorMessage}
         </div>
       )}
 

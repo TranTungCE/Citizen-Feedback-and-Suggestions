@@ -11,12 +11,14 @@ import {
   FileSpreadsheet,
   Mail
 } from 'lucide-react';
-import { feedbackStore, STATUS_LABELS } from '@/lib/feedback/store';
+import { STATUS_LABELS } from '@/lib/feedback/store';
 import { formatVietnameseDateTime } from '@/lib/utils';
+import { getFeedbackMetrics, getAdminFeedbackList } from '@/lib/feedback/service';
 
-export default function AdminDashboardPage() {
-  const metrics = feedbackStore.getMetrics();
-  const recentList = feedbackStore.getAll().slice(0, 5);
+export default async function AdminDashboardPage() {
+  const metrics = await getFeedbackMetrics();
+  const allList = await getAdminFeedbackList();
+  const recentList = allList.slice(0, 5);
 
   return (
     <div className="space-y-8">

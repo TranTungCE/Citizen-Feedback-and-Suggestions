@@ -3,24 +3,27 @@ import { generateReportData, renderReportEmailHtml } from '@/lib/reporting';
 import { sendTransactionalEmail, isResendConfigured } from '@/lib/email/resend';
 import { getAdminSupabase } from '@/lib/supabase/admin';
 import { feedbackStore } from '@/lib/feedback/store';
+import { verifyAdminSessionFromRequest } from '@/lib/auth/admin';
 
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET || 'anthoidong_cron_secret_2026';
   const url = new URL(req.url);
   const secretParam = url.searchParams.get('secret');
+  const isAdmin = verifyAdminSessionFromRequest(req);
 
-  if (
-    authHeader !== `Bearer ${cronSecret}` &&
-    secretParam !== cronSecret &&
-    process.env.NODE_ENV === 'production'
-  ) {
+  const isAuthorized = 
+    (authHeader === `Bearer ${cronSecret}`) ||
+    (secretParam === cronSecret) ||
+    isAdmin;
+
+  if (!isAuthorized && process.env.NODE_ENV === 'production') {
     return NextResponse.json({ error: 'Không có quyền truy cập tác vụ tự động' }, { status: 401 });
   }
 
   const type = (url.searchParams.get('type') as 'daily' | 'weekly' | 'monthly') || 'daily';
   const customTo = url.searchParams.get('to');
-  const reportData = generateReportData(type);
+  const reportData = await generateReportData(type);
   const emailHtml = renderReportEmailHtml(reportData);
 
   // Lấy email người nhận: ưu tiên param ?to=, sau đó từ store, rồi đến env

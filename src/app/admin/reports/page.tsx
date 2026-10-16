@@ -11,8 +11,9 @@ import {
   RefreshCw,
   Eye
 } from 'lucide-react';
-import { generateReportData, renderReportEmailHtml, ReportData } from '@/lib/reporting';
+import { renderReportEmailHtml, ReportData } from '@/lib/reporting';
 import { feedbackStore } from '@/lib/feedback/store';
+import { getReportPreviewAction } from '@/app/actions/reports';
 
 export default function ReportsManagementPage() {
   const [reportType, setReportType] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -23,7 +24,11 @@ export default function ReportsManagementPage() {
   const [targetEmail, setTargetEmail] = useState<string>('tung.trandt2413883@hcmut.edu.vn');
 
   React.useEffect(() => {
-    setReportData(generateReportData(reportType));
+    getReportPreviewAction(reportType).then((res) => {
+      if (res.success && res.data) {
+        setReportData(res.data);
+      }
+    }).catch(() => {});
     setTargetEmail(feedbackStore.getRecipientEmails());
   }, [reportType]);
 

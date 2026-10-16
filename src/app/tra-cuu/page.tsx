@@ -41,21 +41,24 @@ function SearchFeedbackContent() {
     setHasSearched(true);
 
     try {
-      // Đồng bộ từ database nếu có bản ghi mới
-      await fetch('/api/feedback').catch(() => {});
-    } catch {}
-
-    const item = feedbackStore.getByTrackingCode(code);
-    if (item) {
-      setResult(item);
-      setHistory(feedbackStore.getHistory(item.id));
-      setNotFound(false);
-    } else {
+      const res = await fetch(`/api/feedback/tracking?code=${encodeURIComponent(code.trim())}`);
+      const json = await res.json();
+      if (json.success && json.data?.feedback) {
+        setResult(json.data.feedback);
+        setHistory(json.data.history || []);
+        setNotFound(false);
+      } else {
+        setResult(null);
+        setHistory([]);
+        setNotFound(true);
+      }
+    } catch {
       setResult(null);
       setHistory([]);
       setNotFound(true);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const onSubmit = (e: React.FormEvent) => {

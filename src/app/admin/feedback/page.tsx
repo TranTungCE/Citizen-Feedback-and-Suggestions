@@ -22,17 +22,28 @@ export default function FeedbackManagementPage() {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [rawItems, setRawItems] = useState(feedbackStore.getAll());
+  const [categories, setCategories] = useState<any[]>(DEFAULT_CATEGORIES);
+  const [loading, setLoading] = useState(true);
 
   // Tự động đồng bộ với cơ sở dữ liệu server / Supabase
+  const loadData = () => {
+    setLoading(true);
+    Promise.all([
+      fetch('/api/feedback').then(res => res.json()),
+      fetch('/api/categories').then(res => res.json())
+    ]).then(([fbRes, catRes]) => {
+      if (fbRes.success && fbRes.data) {
+        setRawItems(fbRes.data);
+      }
+      if (catRes.success && catRes.data) {
+        setCategories(catRes.data);
+      }
+    }).catch(() => {})
+      .finally(() => setLoading(false));
+  };
+
   React.useEffect(() => {
-    fetch('/api/feedback')
-      .then(res => res.json())
-      .then(res => {
-        if (res.success && res.data) {
-          setRawItems(res.data);
-        }
-      })
-      .catch(() => {});
+    loadData();
   }, []);
 
   const items = rawItems.filter((f) => {
@@ -132,7 +143,7 @@ export default function FeedbackManagementPage() {
             className="w-full px-3 py-1.5 text-xs rounded-lg border border-stone-300 focus:outline-none focus:ring-1 focus:ring-[#8B0000] bg-white"
           >
             <option value="all">Tất cả lĩnh vực</option>
-            {DEFAULT_CATEGORIES.map((c) => (
+            {categories.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>

@@ -45,11 +45,30 @@ export default function SubmitFeedbackPage() {
   });
 
   useEffect(() => {
-    const list = feedbackStore.getActiveCategories();
-    setCategories(list);
-    if (list.length > 0) {
-      setFormData((prev) => ({ ...prev, category_id: list[0].id }));
-    }
+    fetch('/api/categories')
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && json.data && json.data.length > 0) {
+          setCategories(json.data);
+          setFormData((prev) => ({
+            ...prev,
+            category_id: prev.category_id || json.data[0].id
+          }));
+        } else {
+          const list = feedbackStore.getActiveCategories();
+          setCategories(list);
+          if (list.length > 0) {
+            setFormData((prev) => ({ ...prev, category_id: prev.category_id || list[0].id }));
+          }
+        }
+      })
+      .catch(() => {
+        const list = feedbackStore.getActiveCategories();
+        setCategories(list);
+        if (list.length > 0) {
+          setFormData((prev) => ({ ...prev, category_id: prev.category_id || list[0].id }));
+        }
+      });
   }, []);
 
   const handleCopyCode = () => {

@@ -19,21 +19,73 @@ import {
 } from 'lucide-react';
 import { feedbackStore, STATUS_LABELS, PRIORITY_LABELS } from '@/lib/feedback/store';
 import { formatVietnameseDateTime } from '@/lib/utils';
-import { FeedbackStatus } from '@/types';
+import { FeedbackStatus, FeedbackItem, FeedbackHistory, InternalNote } from '@/types';
+import { getAdminFeedbackDetailAction, updateFeedbackStatusAction, addInternalNoteAction } from '@/app/actions/admin';
 
 function FeedbackDetailContent() {
   const params = useParams();
   const router = useRouter();
   const id = params?.id as string;
 
-  const item = feedbackStore.getById(id);
-  const history = item ? feedbackStore.getHistory(item.id) : [];
+  const [item, setItem] = useState<FeedbackItem | null>(null);
+  const [history, setHistory] = useState<FeedbackHistory[]>([]);
+  const [internalNotesList, setInternalNotesList] = useState<InternalNote[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [status, setStatus] = useState<FeedbackStatus>(item?.status || 'new');
+  const [status, setStatus] = useState<FeedbackStatus>('new');
   const [statusNote, setStatusNote] = useState('');
-  const [officialResponse, setOfficialResponse] = useState(item?.official_response || '');
+  const [officialResponse, setOfficialResponse] = useState('');
   const [internalNote, setInternalNote] = useState('');
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [savingStatus, setSavingStatus] = useState(false);
+  const [savingNote, setSavingNote] = useState(false);
+
+  const loadData = async () => {
+    if (!id) return;
+    setLoading(true);
+    try {
+      const res = await getAdminFeedbackDetailAction(id);
+      if (res.success && res.data?.feedback) {
+        setItem(res.data.feedback);
+        setHistory(res.data.history || []);
+        setInternalNotesList(res.data.internalNotes || []);
+        setStatus(res.data.feedback.status);
+        setOfficialResponse(res.data.feedback.official_response || '');
+      } else {
+        const localItem = feedbackStore.getById(id);
+        if (localItem) {
+          setItem(localItem);
+          setHistory(feedbackStore.getHistory(localItem.id));
+          setStatus(localItem.status);
+          setOfficialResponse(localItem.official_response || '');
+        }
+      }
+    } catch {
+      const localItem = feedbackStore.getById(id);
+      if (localItem) {
+        setItem(localItem);
+        setHistory(feedbackStore.getHistory(localItem.id));
+        setStatus(localItem.status);
+        setOfficialResponse(localItem.official_response || '');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    loadData();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="text-center py-16 bg-white rounded-xl border border-stone-200">
+        <div className="w-8 h-8 border-2 border-[#B22222] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+        <div className="text-xs text-stone-500">Đang tải dữ liệu phản ánh từ cơ sở dữ liệu...</div>
+      </div>
+    );
+  }
 
   if (!item) {
     return (
@@ -48,21 +100,53 @@ function FeedbackDetailContent() {
     );
   }
 
-  const handleUpdateStatus = (e: React.FormEvent) => {
+  const handleUpdateStatus = async (e: React.FormEvent) => {
     e.preventDefault();
-    feedbackStore.update(
-      item.id,
-      {
+    setActionError(null);
+    setSavingStatus(true);
+
+    try {
+      const res = await updateFeedbackStatusAction(item.id, {
         status,
         official_response: officialResponse || undefined,
-        official_response_at: officialResponse ? new Date().toISOString() : undefined
-      },
-      'cb-anthoidong',
-      statusNote || `Cập nhật trạng thái sang ${STATUS_LABELS[status]?.label}`
-    );
-    setStatusNote('');
-    setSuccessMsg('Cập nhật trạng thái và phản hồi thành công!');
-    setTimeout(() => setSuccessMsg(null), 3000);
+        note: statusNote || `Cập nhật trạng thái sang ${STATUS_LABELS[status]?.label}`
+      });
+
+      if (res.success) {
+        setStatusNote('');
+        setSuccessMsg('Cập nhật trạng thái và phản hồi thành công vào cơ sở dữ liệu!');
+        setTimeout(() => setSuccessMsg(null), 3500);
+        await loadData();
+      } else {
+        setActionError(res.error || 'Có lỗi xảy ra khi cập nhật.');
+      }
+    } catch (err: any) {
+      setActionError(err?.message || 'Lỗi kết nối khi cập nhật.');
+    } finally {
+      setSavingStatus(false);
+    }
+  };
+
+  const handleAddInternalNote = async () => {
+    if (!internalNote.trim()) return;
+    setSavingNote(true);
+    setActionError(null);
+
+    try {
+      const res = await addInternalNoteAction(item.id, internalNote.trim());
+      if (res.success) {
+        setInternalNote('');
+        setSuccessMsg('Đã lưu ghi chú nội bộ an toàn vào cơ sở dữ liệu.');
+        setTimeout(() => setSuccessMsg(null), 3000);
+        await loadData();
+      } else {
+        setActionError(res.error || 'Không thể lưu ghi chú.');
+      }
+    } catch (e: any) {
+      setActionError(e?.message || 'Lỗi khi lưu ghi chú');
+    } finally {
+      setSavingNote(false);
+    }
   };
 
   return (
@@ -87,8 +171,15 @@ function FeedbackDetailContent() {
 
       {successMsg && (
         <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-semibold flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           {successMsg}
+        </div>
+      )}
+
+      {actionError && (
+        <div className="p-3 bg-red-50 border border-red-200 text-red-800 rounded-lg text-xs font-semibold flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+          {actionError}
         </div>
       )}
 
@@ -233,8 +324,10 @@ function FeedbackDetailContent() {
 
             <button
               type="submit"
-              className="w-full py-2.5 bg-[#8B0000] hover:bg-red-900 text-white text-xs font-bold rounded-lg transition shadow"
+              disabled={savingStatus}
+              className="w-full py-2.5 bg-[#8B0000] hover:bg-red-900 text-white text-xs font-bold rounded-lg transition shadow disabled:opacity-50 flex items-center justify-center gap-1.5"
             >
+              {savingStatus && <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
               Lưu thay đổi & Cập nhật
             </button>
           </form>
@@ -246,8 +339,20 @@ function FeedbackDetailContent() {
               Ghi chú nghiệp vụ nội bộ
             </h3>
             <p className="text-[11px] text-amber-800 leading-relaxed">
-              Các thông tin phân công, số biên bản kiểm tra thực địa hoặc ghi chú trao đổi giữa cán bộ MTTQ và chính quyền xã. Tuyệt đối không để lộ cho người tra cứu công khai.
+              Các thông tin phân công, số biên bản kiểm tra thực địa hoặc ghi chú trao đổi giữa cán bộ MTTQ và chính quyền phường. Tuyệt đối không để lộ cho người tra cứu công khai.
             </p>
+
+            {internalNotesList.length > 0 && (
+              <div className="space-y-2 max-h-40 overflow-y-auto border-t border-amber-200/60 pt-2">
+                {internalNotesList.map((note) => (
+                  <div key={note.id} className="p-2 bg-white rounded border border-amber-200 text-xs text-stone-800">
+                    <div className="text-[10px] text-stone-500 mb-0.5">{formatVietnameseDateTime(note.created_at)}</div>
+                    <div>{note.content}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <textarea
               rows={3}
               value={internalNote}
@@ -257,12 +362,11 @@ function FeedbackDetailContent() {
             ></textarea>
             <button
               type="button"
-              onClick={() => {
-                alert('Đã lưu ghi chú nghiệp vụ nội bộ.');
-                setInternalNote('');
-              }}
-              className="px-3 py-1.5 bg-amber-800 text-white rounded text-xs font-bold hover:bg-amber-900 transition"
+              disabled={savingNote || !internalNote.trim()}
+              onClick={handleAddInternalNote}
+              className="px-3 py-1.5 bg-amber-800 text-white rounded text-xs font-bold hover:bg-amber-900 transition disabled:opacity-50 flex items-center gap-1.5"
             >
+              {savingNote && <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
               Lưu ghi chú nội bộ
             </button>
           </div>
