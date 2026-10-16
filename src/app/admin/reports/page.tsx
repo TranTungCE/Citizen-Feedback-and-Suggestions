@@ -99,16 +99,25 @@ export default function ReportsManagementPage() {
       </div>
 
       {testResult && (
-        <div className={`p-4 rounded-xl border text-xs ${testResult.success ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
-          <div className="font-bold flex items-center gap-2 mb-1">
-            {testResult.success ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <AlertCircle className="w-4 h-4 text-red-600" />}
-            {testResult.message || 'Kết quả thực thi:'}
+        <div className={`p-4 rounded-xl border text-xs ${testResult.success && testResult.emailResult?.success ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}`}>
+          <div className="font-bold flex items-center gap-2 mb-1.5 text-sm">
+            {testResult.emailResult?.success ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <AlertCircle className="w-4 h-4 text-amber-600" />}
+            {testResult.emailResult?.success ? 'Báo cáo đã được kết xuất và gửi email thành công!' : 'Đã kết xuất dữ liệu báo cáo (Chưa gửi được email thực tế)'}
           </div>
-          <div>Mã chống trùng (Idempotency Key): <strong>{testResult.idempotencyKey}</strong></div>
-          <div>Số bản ghi tổng hợp: <strong>{testResult.totalRecords}</strong></div>
-          <div>Người nhận: <strong>{testResult.recipients?.join(', ') || targetEmail}</strong></div>
-          <div className="mt-1 text-[11px] text-stone-600">
-            Trạng thái gửi thư: {testResult.emailResult?.success ? 'Đã gửi thành công qua Resend' : `Thông báo: ${testResult.emailResult?.error}`}
+          <div className="space-y-1 text-stone-700">
+            <div>Mã định danh (Idempotency Key): <strong className="font-mono text-stone-900">{testResult.idempotencyKey}</strong></div>
+            <div>Số bản ghi tổng hợp trong kỳ: <strong>{testResult.totalRecords} phản ánh</strong></div>
+            <div>Hộp thư tiếp nhận: <strong>{testResult.recipients?.join(', ') || targetEmail}</strong></div>
+            <div className="mt-2 pt-2 border-t border-amber-200/60 text-xs">
+              <strong>Trạng thái gửi thư: </strong> 
+              {testResult.emailResult?.success ? (
+                <span className="text-emerald-700 font-semibold">Đã gửi thành công qua Resend (Message ID: {testResult.emailResult.messageId})</span>
+              ) : (
+                <span className="text-amber-800 font-semibold">
+                  {testResult.emailResult?.error || 'Chưa nhận diện được biến môi trường RESEND_API_KEY trên môi trường chạy hiện tại.'}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       )}
