@@ -21,12 +21,32 @@ export default function FeedbackManagementPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
+  const [rawItems, setRawItems] = useState(feedbackStore.getAll());
 
-  const items = feedbackStore.getAll({
-    search,
-    status: statusFilter,
-    category_id: categoryFilter,
-    priority: priorityFilter
+  // Tự động đồng bộ với cơ sở dữ liệu server / Supabase
+  React.useEffect(() => {
+    fetch('/api/feedback')
+      .then(res => res.json())
+      .then(res => {
+        if (res.success && res.data) {
+          setRawItems(res.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const items = rawItems.filter((f) => {
+    if (search) {
+      const q = search.toLowerCase();
+      const match = f.tracking_code.toLowerCase().includes(q) ||
+        f.title.toLowerCase().includes(q) ||
+        f.location_text.toLowerCase().includes(q);
+      if (!match) return false;
+    }
+    if (statusFilter !== 'all' && f.status !== statusFilter) return false;
+    if (categoryFilter !== 'all' && f.category_id !== categoryFilter) return false;
+    if (priorityFilter !== 'all' && f.priority !== priorityFilter) return false;
+    return true;
   });
 
   const exportCSV = () => {

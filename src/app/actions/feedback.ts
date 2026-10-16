@@ -95,16 +95,16 @@ export async function submitFeedbackAction(formData: FeedbackSubmissionForm): Pr
   if (!data.is_anonymous && data.submitter_email) {
     await sendTransactionalEmail({
       to: data.submitter_email,
-      subject: `[MTTQ Xã An Thới Đông] Tiếp nhận phản ánh - Mã ${trackingCode}`,
+      subject: `[MTTQ Phường Diên Hồng] Tiếp nhận phản ánh - Mã ${trackingCode}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
           <div style="background-color: #8B0000; color: #fff; padding: 18px 24px; border-radius: 8px 8px 0 0;">
-            <h2 style="margin: 0; font-size: 18px; color: #FFD700;">ỦY BAN MTTQ VIỆT NAM XÃ AN THỚI ĐÔNG</h2>
+            <h2 style="margin: 0; font-size: 18px; color: #FFD700;">ỦY BAN MTTQ VIỆT NAM PHƯỜNG DIÊN HỒNG</h2>
             <p style="margin: 4px 0 0; font-size: 14px;">Cổng tiếp nhận góp ý, phản ánh Nhân dân</p>
           </div>
           <div style="padding: 24px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px; background: #fafafa;">
             <p>Kính gửi <strong>${data.submitter_name || 'Quý công dân'}</strong>,</p>
-            <p>Ủy ban MTTQ Việt Nam xã An Thới Đông xác nhận đã tiếp nhận ý kiến đóng góp/phản ánh của Quý công dân với thông tin chi tiết như sau:</p>
+            <p>Ủy ban MTTQ Việt Nam Phường Diên Hồng xác nhận đã tiếp nhận ý kiến đóng góp/phản ánh của Quý công dân với thông tin chi tiết như sau:</p>
             <div style="background: #fff; padding: 16px; border-radius: 6px; border-left: 4px solid #8B0000; margin: 16px 0;">
               <p style="margin: 4px 0;"><strong>Mã tiếp nhận:</strong> <span style="font-size: 18px; color: #8B0000; font-weight: bold;">${trackingCode}</span></p>
               <p style="margin: 4px 0;"><strong>Tiêu đề:</strong> ${data.title}</p>

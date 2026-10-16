@@ -47,7 +47,7 @@ export default function HuongDanPage() {
             Lưu mã tiếp nhận và Tra cứu kết quả
           </h2>
           <p className="text-stone-600 text-sm leading-relaxed">
-            Sau khi bấm <strong>"Gửi phản ánh"</strong>, hệ thống sẽ cấp một mã duy nhất định dạng <code>ATD-YYMMDD-XXXX</code>. Hãy bấm nút sao chép và lưu lại mã này. Bạn có thể nhập mã này vào trang Tra cứu bất kỳ lúc nào để xem tiến độ giải quyết của cơ quan chức năng.
+            Sau khi bấm <strong>"Gửi phản ánh"</strong>, hệ thống sẽ cấp một mã duy nhất định dạng <code>DH-YYMMDD-XXXX</code>. Hãy bấm nút sao chép và lưu lại mã này. Bạn có thể nhập mã này vào trang Tra cứu bất kỳ lúc nào để xem tiến độ giải quyết của cơ quan chức năng.
           </p>
         </div>
       </div>

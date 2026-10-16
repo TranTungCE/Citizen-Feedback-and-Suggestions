@@ -34,25 +34,28 @@ function SearchFeedbackContent() {
     }
   }, [initialCode]);
 
-  const handleSearchCode = (code: string) => {
+  const handleSearchCode = async (code: string) => {
     if (!code.trim()) return;
     setLoading(true);
     setNotFound(false);
     setHasSearched(true);
 
-    setTimeout(() => {
-      const item = feedbackStore.getByTrackingCode(code);
-      if (item) {
-        setResult(item);
-        setHistory(feedbackStore.getHistory(item.id));
-        setNotFound(false);
-      } else {
-        setResult(null);
-        setHistory([]);
-        setNotFound(true);
-      }
-      setLoading(false);
-    }, 300);
+    try {
+      // Đồng bộ từ database nếu có bản ghi mới
+      await fetch('/api/feedback').catch(() => {});
+    } catch {}
+
+    const item = feedbackStore.getByTrackingCode(code);
+    if (item) {
+      setResult(item);
+      setHistory(feedbackStore.getHistory(item.id));
+      setNotFound(false);
+    } else {
+      setResult(null);
+      setHistory([]);
+      setNotFound(true);
+    }
+    setLoading(false);
   };
 
   const onSubmit = (e: React.FormEvent) => {
@@ -67,7 +70,7 @@ function SearchFeedbackContent() {
           Tra cứu tiến độ phản ánh
         </h1>
         <p className="text-stone-600 text-sm mt-2">
-          Nhập mã tiếp nhận (định dạng ATD-YYMMDD-XXXX) được cấp khi gửi phản ánh để kiểm tra tiến trình giải quyết
+          Nhập mã tiếp nhận (định dạng DH-YYMMDD-XXXX) được cấp khi gửi phản ánh để kiểm tra tiến trình giải quyết
         </p>
       </div>
 
@@ -81,7 +84,7 @@ function SearchFeedbackContent() {
               required
               value={trackingCode}
               onChange={(e) => setTrackingCode(e.target.value.toUpperCase())}
-              placeholder="Nhập mã tiếp nhận: ATD-261016-8921..."
+              placeholder="Nhập mã tiếp nhận: DH-261016-8921..."
               className="w-full pl-11 pr-4 py-3 rounded-lg border-2 border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#8B0000] focus:border-transparent text-sm font-mono uppercase tracking-wider"
             />
           </div>
