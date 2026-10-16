@@ -22,10 +22,11 @@ export default function AdminLoginPage() {
     setTimeout(() => {
       if (
         (username.trim() === 'admin' && password === 'admin123') ||
-        (username.trim().toLowerCase() === 'admin@dienhong.gov.vn' && password === 'admin123') ||
-        (username.trim().toLowerCase() === 'admin@anthoidong.gov.vn' && password === 'admin123')
+        (username.trim().toLowerCase() === 'admin@dienhong.gov.vn' && password === 'admin123')
       ) {
+        document.cookie = "dh_admin_session=authenticated; path=/; max-age=86400";
         document.cookie = "atd_admin_session=authenticated; path=/; max-age=86400";
+        localStorage.setItem("dh_admin_last_activity", Date.now().toString());
         localStorage.setItem("atd_admin_last_activity", Date.now().toString());
         router.push('/admin');
       } else {

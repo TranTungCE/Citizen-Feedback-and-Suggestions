@@ -1,6 +1,6 @@
-# CỔNG TIẾP NHẬN GÓP Ý VÀ PHẢN ÁNH AN THỚI ĐÔNG
+# CỔNG TIẾP NHẬN GÓP Ý VÀ PHẢN ÁNH PHƯỜNG DIÊN HỒNG
 
-Ứng dụng web tiếp nhận góp ý, kiến nghị và phản ánh của Nhân dân phục vụ **Ủy ban Mặt trận Tổ quốc Việt Nam xã An Thới Đông, huyện Cần Giờ, Thành phố Hồ Chí Minh**.
+Ứng dụng web tiếp nhận góp ý, kiến nghị và phản ánh của Nhân dân phục vụ **Ủy ban Mặt trận Tổ quốc Việt Nam Phường Diên Hồng, Thành phố Hồ Chí Minh**.
 
 Hệ thống được thiết kế theo tiêu chuẩn công quyền trang trọng, thân thiện, bảo vệ danh tính người phản ánh, hỗ trợ tra cứu công khai và cung cấp bộ công cụ quản trị, phân loại, thống kê và gửi báo cáo tự động qua email.
 
@@ -30,7 +30,7 @@ Hệ thống được thiết kế theo tiêu chuẩn công quyền trang trọn
    - Biểu mẫu nhập liệu trực quan, xác thực Zod nghiêm ngặt.
    - Hỗ trợ 2 chế độ: **Có thông tin liên hệ** hoặc **Gửi ẩn danh**.
    - Chống Spam bằng cơ chế Honeypot ẩn.
-   - Cấp mã tiếp nhận duy nhất định dạng chuẩn: `ATD-YYMMDD-XXXX` (ví dụ `ATD-261016-8921`).
+   - Cấp mã tiếp nhận duy nhất định dạng chuẩn: `DH-YYMMDD-XXXX` (ví dụ `DH-261016-8921`).
    - Tự động gửi thư xác nhận nếu người dân cung cấp địa chỉ email.
 3. **Tra cứu tiến độ giải quyết (`/tra-cuu`)**:
    - Tra cứu bằng mã tiếp nhận.
@@ -103,15 +103,15 @@ Hệ thống được thiết kế theo tiêu chuẩn công quyền trang trọn
 2. Thêm vào file môi trường:
    ```env
    RESEND_API_KEY=re_xxxxxxxxx
-   EMAIL_FROM=Cổng Góp Ý An Thới Đông <onboarding@resend.dev>
-   REPORT_RECIPIENT_EMAILS=lanhdao@anthoidong.gov.vn
+   EMAIL_FROM=Cổng Góp Ý Phường Diên Hồng <onboarding@resend.dev>
+   REPORT_RECIPIENT_EMAILS=lanhdao@dienhong.gov.vn
    ```
 
 ### 3.4. Triển khai lên Vercel
 1. Đẩy mã nguồn lên kho lưu trữ GitHub:
    ```bash
    git add .
-   git commit -m "feat: complete An Thoi Dong Feedback and Reporting Portal"
+   git commit -m "feat: complete Dien Hong Feedback and Reporting Portal"
    git branch -M main
    git remote add origin https://github.com/<your-username>/<your-repo>.git
    git push -u origin main

@@ -1,5 +1,5 @@
 -- ==============================================================================
--- CỔNG TIẾP NHẬN GÓP Ý, PHẢN ÁNH XÃ AN THỚI ĐÔNG
+-- CỔNG TIẾP NHẬN GÓP Ý, PHẢN ÁNH PHƯỜNG DIÊN HỒNG
 -- SUPABASE POSTGRESQL MIGRATION & SCHEMA DEFINITION
 -- ==============================================================================
 

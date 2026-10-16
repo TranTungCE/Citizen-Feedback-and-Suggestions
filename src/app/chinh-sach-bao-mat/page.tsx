@@ -6,7 +6,7 @@ export default function ChinhSachBaoMatPage() {
     <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
       <div>
         <span className="text-xs font-bold text-[#8B0000] uppercase tracking-wider">
-          Ủy ban MTTQ Việt Nam Xã An Thới Đông
+          Ủy ban MTTQ Việt Nam Phường Diên Hồng
         </span>
         <h1 className="text-3xl font-extrabold text-stone-900 mt-1">
           Chính sách bảo vệ dữ liệu cá nhân & Quyền riêng tư

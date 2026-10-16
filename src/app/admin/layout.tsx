@@ -23,8 +23,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   const handleLogout = () => {
+    document.cookie = "dh_admin_session=; path=/; max-age=0";
     document.cookie = "atd_admin_session=; path=/; max-age=0";
     if (typeof window !== 'undefined') {
+      localStorage.removeItem("dh_admin_last_activity");
       localStorage.removeItem("atd_admin_last_activity");
     }
     router.push('/admin/login');
@@ -38,11 +40,12 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     }
 
     const checkSession = () => {
-      const hasSession = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('atd_admin_session='));
+      const cookies = document.cookie.split('; ');
+      const hasSession = cookies.some((row) => 
+        row.startsWith('dh_admin_session=') || row.startsWith('atd_admin_session=')
+      );
 
-      const lastActivity = localStorage.getItem("atd_admin_last_activity");
+      const lastActivity = localStorage.getItem("dh_admin_last_activity") || localStorage.getItem("atd_admin_last_activity");
       const now = Date.now();
 
       if (!hasSession || (lastActivity && now - parseInt(lastActivity, 10) > INACTIVITY_TIMEOUT_MS)) {
@@ -55,7 +58,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
     if (checkSession()) {
       setIsAuthenticated(true);
-      localStorage.setItem("atd_admin_last_activity", Date.now().toString());
+      localStorage.setItem("dh_admin_last_activity", Date.now().toString());
     }
 
     // Lắng nghe sự kiện người dùng hoạt động để reset bộ đếm thời gian

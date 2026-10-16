@@ -5,7 +5,7 @@ export default function DieuKhoanSuDungPage() {
     <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
       <div>
         <span className="text-xs font-bold text-[#8B0000] uppercase tracking-wider">
-          Ủy ban MTTQ Việt Nam Xã An Thới Đông
+          Ủy ban MTTQ Việt Nam Phường Diên Hồng
         </span>
         <h1 className="text-3xl font-extrabold text-stone-900 mt-1">
           Điều khoản sử dụng Cổng tiếp nhận
@@ -17,7 +17,7 @@ export default function DieuKhoanSuDungPage() {
         <section className="space-y-2">
           <h2 className="text-base font-bold text-stone-900">1. Phạm vi tiếp nhận</h2>
           <p>
-            Cổng tiếp nhận các ý kiến đóng góp, phản ánh, hiến kế liên quan đến hạ tầng giao thông, vệ sinh môi trường, an sinh xã hội, an ninh trật tự sinh hoạt cộng đồng và thái độ phục vụ hành chính trên địa bàn xã An Thới Đông.
+            Cổng tiếp nhận các ý kiến đóng góp, phản ánh, hiến kế liên quan đến hạ tầng giao thông, vệ sinh môi trường, an sinh xã hội, an ninh trật tự sinh hoạt cộng đồng và thái độ phục vụ hành chính trên địa bàn Phường Diên Hồng.
           </p>
         </section>
 

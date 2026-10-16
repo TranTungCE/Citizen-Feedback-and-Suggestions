@@ -7,13 +7,13 @@ export default function HuongDanPage() {
     <div className="max-w-4xl mx-auto px-4 py-12 space-y-10">
       <div className="text-center max-w-2xl mx-auto">
         <span className="text-xs font-bold text-[#8B0000] uppercase tracking-wider">
-          Ủy ban MTTQ Việt Nam Xã An Thới Đông
+          Ủy ban MTTQ Việt Nam Phường Diên Hồng
         </span>
         <h1 className="text-3xl font-extrabold text-stone-900 mt-1">
           Hướng dẫn gửi và theo dõi phản ánh
         </h1>
         <p className="text-stone-600 text-sm mt-2">
-          Các bước chi tiết để người dân gửi ý kiến đóng góp, kiến nghị đến chính quyền và Mặt trận xã
+          Các bước chi tiết để người dân gửi ý kiến đóng góp, kiến nghị đến chính quyền và Mặt trận phường
         </p>
       </div>
 
@@ -25,7 +25,7 @@ export default function HuongDanPage() {
           </h2>
           <p className="text-stone-600 text-sm leading-relaxed">
             - Ghi rõ nội dung sự việc: mô tả ngắn gọn, trung thực tình trạng xảy ra (ví dụ: đường hư hỏng, rác thải ùn ứ, đèn chiếu sáng không sáng...).<br/>
-            - Địa điểm cụ thể: Ấp, tuyến đường, số nhà hoặc mốc định vị dễ nhận biết trên địa bàn xã An Thới Đông.<br/>
+            - Địa điểm cụ thể: Khu phố, tuyến đường, số nhà hoặc mốc định vị dễ nhận biết trên địa bàn Phường Diên Hồng.<br/>
             - Thời gian phát hiện sự việc.
           </p>
         </div>

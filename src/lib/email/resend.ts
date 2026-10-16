@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
 const resendApiKey = process.env.RESEND_API_KEY || '';
-const defaultFrom = process.env.EMAIL_FROM || 'Cổng Góp Ý An Thới Đông <onboarding@resend.dev>';
+const defaultFrom = process.env.EMAIL_FROM || 'Cổng Góp Ý Phường Diên Hồng <onboarding@resend.dev>';
 
 export const isResendConfigured = () => {
   return Boolean(resendApiKey && !resendApiKey.includes('your_api_key'));
