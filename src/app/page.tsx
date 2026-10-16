@@ -202,32 +202,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. NỀN TRẮNG ĐỎ THÂN THIỆN CHO MỌI LỨA TUỔI */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-red-50 to-white rounded-2xl p-8 sm:p-10 border-2 border-red-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 text-[#B22222] font-bold text-sm">
-              <ShieldCheck className="w-5 h-5" />
-              Bảo vệ danh tính & Quyền riêng tư của công dân
+      {/* 5. GHI CHÚ BẢO VỆ DANH TÍNH (THU NHỎ GỌN GÀNG) */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="bg-gradient-to-r from-red-50/80 via-white to-red-50/50 rounded-xl p-4 sm:p-5 border border-red-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-1 text-center sm:text-left">
+            <div className="inline-flex items-center gap-1.5 text-[#B22222] font-bold text-xs">
+              <ShieldCheck className="w-4 h-4 shrink-0" />
+              <span>Bảo vệ danh tính & Quyền riêng tư của công dân</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900">
+            <h3 className="text-sm sm:text-base font-extrabold text-stone-900">
               Bạn có thể gửi phản ánh ẩn danh
-            </h2>
-            <p className="text-stone-600 text-sm leading-relaxed">
-              Nếu bạn không muốn cung cấp họ tên hoặc số điện thoại, hệ thống hoàn toàn cho phép gửi ẩn danh. Mọi thông tin đóng góp đều được cán bộ MTTQ tiếp nhận và xem xét công tâm.
+            </h3>
+            <p className="text-stone-600 text-xs leading-relaxed max-w-xl">
+              Nếu không muốn cung cấp họ tên hoặc số điện thoại, hệ thống hoàn toàn cho phép gửi ẩn danh. Cán bộ MTTQ vẫn tiếp nhận và xác minh sự việc công tâm.
             </p>
           </div>
 
-          <div className="shrink-0 flex flex-col sm:flex-row gap-3">
+          <div className="shrink-0 flex items-center gap-2">
             <Link
               href="/gui-gop-y"
-              className="px-6 py-3.5 bg-[#B22222] text-white font-bold text-sm rounded-xl hover:bg-red-900 transition shadow"
+              className="px-4 py-2 bg-[#B22222] text-white font-bold text-xs rounded-lg hover:bg-red-900 transition shadow-xs"
             >
               Gửi phản ánh ngay
             </Link>
             <Link
               href="/chinh-sach-bao-mat"
-              className="px-5 py-3.5 bg-white text-stone-700 font-bold text-sm rounded-xl border border-stone-300 hover:bg-stone-50 transition text-center"
+              className="px-3.5 py-2 bg-white text-stone-700 font-semibold text-xs rounded-lg border border-stone-200 hover:bg-stone-50 transition"
             >
               Chính sách bảo mật
             </Link>

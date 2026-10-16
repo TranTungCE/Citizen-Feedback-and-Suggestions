@@ -1,28 +1,67 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
   Inbox, 
   FileSpreadsheet, 
   Settings, 
-  Users, 
   LogOut,
   ExternalLink,
-  ShieldCheck,
   ChevronRight
 } from 'lucide-react';
 import { LogoSvg } from '@/components/LogoSvg';
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  // Kiểm tra trạng thái đăng nhập
+  useEffect(() => {
+    if (pathname === '/admin/login') {
+      setIsAuthenticated(true);
+      return;
+    }
+
+    const hasSession = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('atd_admin_session='));
+
+    if (!hasSession) {
+      setIsAuthenticated(false);
+      router.push('/admin/login');
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [pathname, router]);
+
+  const handleLogout = () => {
+    document.cookie = "atd_admin_session=; path=/; max-age=0";
+    router.push('/admin/login');
+  };
+
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
+  if (isAuthenticated === null || isAuthenticated === false) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-stone-50 text-xs text-stone-500">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 border-2 border-[#B22222] border-t-transparent rounded-full animate-spin"></div>
+          <span>Đang xác thực quyền truy cập cán bộ...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col md:flex-row font-sans">
-      {/* Sidebar Admin: Thiết kế Nền Trắng - Đỏ Đô Hiện Đại, Dễ Nhìn */}
+      {/* Sidebar Admin */}
       <aside className="w-full md:w-64 bg-white border-r border-stone-200 flex flex-col shrink-0 shadow-sm">
-        {/* Header Sidebar */}
         <div className="p-5 border-b border-stone-100 bg-red-50/40">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-0.5 shadow-sm border border-red-200 shrink-0">
@@ -97,19 +136,19 @@ export default function AdminLayout({
           </div>
         </nav>
 
-        {/* Trạng thái cán bộ */}
+        {/* Trạng thái cán bộ & Đăng xuất */}
         <div className="p-4 border-t border-stone-100 bg-stone-50/60 text-xs">
           <div className="flex items-center gap-2 mb-2 font-medium text-stone-800">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-            <span>Cán bộ tiếp nhận</span>
+            <span>Cán bộ: Quản trị viên</span>
           </div>
-          <Link
-            href="/"
-            className="text-stone-500 hover:text-[#B22222] flex items-center gap-1.5 transition text-xs font-semibold"
+          <button
+            onClick={handleLogout}
+            className="w-full text-left text-stone-500 hover:text-[#B22222] flex items-center gap-1.5 transition text-xs font-semibold"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Thoát phiên làm việc</span>
-          </Link>
+          </button>
         </div>
       </aside>
 
@@ -118,5 +157,13 @@ export default function AdminLayout({
         {children}
       </main>
     </div>
+  );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-stone-50 text-xs text-stone-500">Đang tải...</div>}>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </Suspense>
   );
 }
