@@ -59,9 +59,9 @@ function FooterContent() {
   return (
     <footer className="bg-gradient-to-b from-stone-50 to-stone-100/90 text-stone-700 text-sm mt-20 border-t border-red-200/80 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10">
-          {/* Cột 1: Thông tin cơ quan Phường Diên Hồng */}
-          <div className="md:col-span-5 space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          {/* Cột Trái (lg:col-span-6): Thông tin cơ quan Phường Diên Hồng */}
+          <div className="lg:col-span-6 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shrink-0 shadow-sm border border-red-200">
                 <LogoSvg className="w-10 h-10" />
@@ -76,7 +76,7 @@ function FooterContent() {
               </div>
             </div>
 
-            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed">
+            <p className="text-stone-600 text-xs sm:text-sm leading-relaxed max-w-xl">
               Cổng tiếp nhận ý kiến đóng góp, phản ánh và kiến nghị của Nhân dân nhằm xây dựng địa bàn phường văn minh, hiện đại, an toàn và nghĩa tình.
             </p>
 
@@ -100,96 +100,92 @@ function FooterContent() {
             </div>
           </div>
 
-          {/* Cột 2: Danh mục liên kết tiện ích (Thẻ Button hiện đại, rõ ràng) */}
-          <div className="md:col-span-3 space-y-3">
-            <div className="flex items-center gap-2 text-stone-900 font-extrabold text-xs uppercase tracking-wider border-b border-stone-200 pb-2">
-              <span className="w-2 h-2 rounded-full bg-[#B22222]"></span>
-              <span>Liên kết Tiện ích</span>
-            </div>
-
-            <div className="space-y-1.5 text-xs">
-              <Link
-                href="/gui-gop-y"
-                className="group flex items-center justify-between p-2 rounded-lg bg-white border border-stone-200/80 hover:border-red-300 hover:shadow-xs transition text-stone-700 hover:text-[#B22222]"
-              >
-                <div className="flex items-center gap-2">
-                  <Send className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold">Gửi phản ánh, kiến nghị</span>
+          {/* Cột Phải (lg:col-span-6): Dồn toàn bộ Tiện ích & Hỗ trợ về bên phải gọn gàng */}
+          <div className="lg:col-span-6 space-y-4">
+            {/* Khối tiện ích liên kết nhanh dạng hàng thẻ gọn */}
+            <div className="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/90 shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
+                <div className="flex items-center gap-2 text-stone-900 font-extrabold text-xs uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-[#B22222]"></span>
+                  <span>Liên kết Tiện ích</span>
                 </div>
-                <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-
-              <Link
-                href="/tra-cuu"
-                className="group flex items-center justify-between p-2 rounded-lg bg-white border border-stone-200/80 hover:border-red-300 hover:shadow-xs transition text-stone-700 hover:text-[#B22222]"
-              >
-                <div className="flex items-center gap-2">
-                  <Search className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold">Tra cứu tiến độ giải quyết</span>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-
-              <Link
-                href="/huong-dan"
-                className="group flex items-center justify-between p-2 rounded-lg bg-white border border-stone-200/80 hover:border-red-300 hover:shadow-xs transition text-stone-700 hover:text-[#B22222]"
-              >
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold">Hướng dẫn gửi ý kiến</span>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-
-              <Link
-                href="/chinh-sach-bao-mat"
-                className="group flex items-center justify-between p-2 rounded-lg bg-white border border-stone-200/80 hover:border-red-300 hover:shadow-xs transition text-stone-700 hover:text-[#B22222]"
-              >
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold">Chính sách bảo vệ dữ liệu</span>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-
-              <Link
-                href="/dieu-khoan-su-dung"
-                className="group flex items-center justify-between p-2 rounded-lg bg-white border border-stone-200/80 hover:border-red-300 hover:shadow-xs transition text-stone-700 hover:text-[#B22222]"
-              >
-                <div className="flex items-center gap-2">
-                  <FileText className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold">Điều khoản sử dụng</span>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Cột 3: Khung lưu ý về thẩm quyền và tiếp nhận (Thiết kế Card tinh tế, nổi bật số khẩn cấp) */}
-          <div className="md:col-span-4 space-y-3">
-            <div className="bg-white p-5 rounded-2xl border border-red-200 shadow-xs space-y-3">
-              <div className="flex items-center gap-2 text-[#B22222] font-extrabold text-xs uppercase tracking-wider border-b border-red-100 pb-2">
-                <ShieldAlert className="w-4 h-4 shrink-0" />
-                <span>Phạm vi & Thẩm quyền tiếp nhận</span>
+                <span className="text-[11px] text-stone-400">Dịch vụ trực tuyến</span>
               </div>
-              <p className="text-xs text-stone-600 leading-relaxed">
-                Hệ thống do Ủy ban MTTQ Việt Nam Phường Diên Hồng vận hành phục vụ công tác giám sát và phối hợp chính quyền địa phương giải quyết kiến nghị của bà con nhân dân.
-              </p>
 
-              {/* Hộp liên hệ khẩn cấp nổi bật */}
-              <div className="bg-red-50/70 p-3 rounded-xl border border-red-100 space-y-1.5 text-xs">
-                <div className="flex items-center gap-1.5 text-[#B22222] font-bold text-[11px] uppercase">
-                  <PhoneCall className="w-3.5 h-3.5 shrink-0" />
-                  <span>Trường hợp khẩn cấp (An ninh / Cứu nạn):</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <Link
+                  href="/gui-gop-y"
+                  className="group flex items-center justify-between p-2 rounded-lg bg-stone-50/70 hover:bg-red-50/50 border border-stone-200/60 hover:border-red-200 transition text-stone-700 hover:text-[#B22222]"
+                >
+                  <div className="flex items-center gap-2">
+                    <Send className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold">Gửi phản ánh mới</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/tra-cuu"
+                  className="group flex items-center justify-between p-2 rounded-lg bg-stone-50/70 hover:bg-red-50/50 border border-stone-200/60 hover:border-red-200 transition text-stone-700 hover:text-[#B22222]"
+                >
+                  <div className="flex items-center gap-2">
+                    <Search className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold">Tra cứu tiến độ</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/huong-dan"
+                  className="group flex items-center justify-between p-2 rounded-lg bg-stone-50/70 hover:bg-red-50/50 border border-stone-200/60 hover:border-red-200 transition text-stone-700 hover:text-[#B22222]"
+                >
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold">Hướng dẫn quy trình</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/chinh-sach-bao-mat"
+                  className="group flex items-center justify-between p-2 rounded-lg bg-stone-50/70 hover:bg-red-50/50 border border-stone-200/60 hover:border-red-200 transition text-stone-700 hover:text-[#B22222]"
+                >
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold">Chính sách bảo mật</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/dieu-khoan-su-dung"
+                  className="group flex items-center justify-between p-2 rounded-lg bg-stone-50/70 hover:bg-red-50/50 border border-stone-200/60 hover:border-red-200 transition text-stone-700 hover:text-[#B22222] sm:col-span-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-3.5 h-3.5 text-[#B22222] group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold">Điều khoản sử dụng hệ thống</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+              </div>
+
+              {/* Hộp liên hệ khẩn cấp tinh gọn tích hợp liền mạch ngay dưới */}
+              <div className="bg-red-50/70 p-3 rounded-xl border border-red-100 space-y-2 text-xs mt-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-[#B22222] font-bold text-[11px] uppercase">
+                    <PhoneCall className="w-3.5 h-3.5 shrink-0" />
+                    <span>Hỗ trợ khẩn cấp:</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px]">
+                    <span className="px-1.5 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">113</span>
+                    <span className="px-1.5 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">114</span>
+                    <span className="px-1.5 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">115</span>
+                  </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                  <span className="px-2 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">113 (Công an)</span>
-                  <span className="px-2 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">114 (PCCC)</span>
-                  <span className="px-2 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">115 (Y tế)</span>
+                <div className="text-[11px] text-stone-600 flex items-center justify-between pt-0.5 border-t border-red-100/60">
+                  <span>Công an Phường Diên Hồng: <strong>Số 592 Bà Hạt</strong></span>
+                  <span className="text-[10px] text-stone-500">Giám sát & Tiếp nhận MTTQ</span>
                 </div>
-                <p className="text-[11px] text-stone-600 pt-1">
-                  Hoặc liên hệ trực tiếp <strong>Công an Phường Diên Hồng</strong>: Số 592 Bà Hạt.
-                </p>
               </div>
             </div>
           </div>
