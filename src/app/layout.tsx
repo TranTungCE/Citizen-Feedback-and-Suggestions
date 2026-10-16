@@ -13,6 +13,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Cổng tiếp nhận góp ý, phản ánh Phường Diên Hồng',
   description: 'Cổng tiếp nhận ý kiến đóng góp, phản ánh của Nhân dân phục vụ Ủy ban Mặt trận Tổ quốc Việt Nam Phường Diên Hồng, Thành phố Hồ Chí Minh.',
+  icons: {
+    icon: '/logo.svg',
+    shortcut: '/logo.svg',
+    apple: '/logo.svg',
+  },
 };
 
 export default function RootLayout({
