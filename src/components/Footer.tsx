@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { MapPin, Phone, Mail, Clock, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, ShieldAlert } from 'lucide-react';
 import { LogoSvg } from './LogoSvg';
 
 export function Footer() {
@@ -25,7 +25,7 @@ export function Footer() {
             <div className="space-y-2.5 text-xs sm:text-sm text-red-100">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
-                <span>Ấp An Nghĩa, xã An Thới Đông, huyện Cần Giờ, TP. Hồ Chí Minh</span>
+                <span>Số 313 đường An Thới Đông, ấp An Hòa 1, xã An Thới Đông, huyện Cần Giờ, TP. Hồ Chí Minh</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-amber-400 shrink-0" />
@@ -74,15 +74,6 @@ export function Footer() {
                   • Điều khoản sử dụng dịch vụ tiếp nhận
                 </Link>
               </li>
-              <li className="pt-2">
-                <Link 
-                  href="/admin" 
-                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 hover:bg-white/20 text-amber-200 rounded font-semibold transition"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                  Đăng nhập Cổng Quản trị Cán bộ
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -98,12 +89,10 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Bản quyền cập nhật: Đoàn Thanh niên - Hội Sinh viên Trường Đại học Bách khoa - ĐHQG-HCM */}
         <div className="border-t border-red-900 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-red-200">
           <div>
-            © 2026 Ủy ban Mặt trận Tổ quốc Việt Nam xã An Thới Đông, Huyện Cần Giờ.
-          </div>
-          <div className="mt-2 sm:mt-0 font-medium">
-            Hệ thống chuẩn mực - Thân thiện - Phục vụ Nhân dân
+            © Đoàn Thanh niên - Hội Sinh viên Trường Đại học Bách khoa - ĐHQG-HCM
           </div>
         </div>
       </div>

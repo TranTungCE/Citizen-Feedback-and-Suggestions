@@ -26,8 +26,8 @@ export default function LienHePage() {
             <div className="flex items-start gap-3">
               <MapPin className="w-5 h-5 text-[#8B0000] shrink-0 mt-0.5" />
               <div>
-                <strong>Địa chỉ:</strong><br />
-                Ấp An Nghĩa, xã An Thới Đông, huyện Cần Giờ, Thành phố Hồ Chí Minh.
+                <strong>Địa chỉ (sau sắp xếp địa giới):</strong><br />
+                Số 313 đường An Thới Đông, ấp An Hòa 1, xã An Thới Đông, huyện Cần Giờ, Thành phố Hồ Chí Minh.
               </div>
             </div>
 
