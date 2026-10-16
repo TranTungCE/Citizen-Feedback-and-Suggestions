@@ -171,6 +171,10 @@ function FooterContent() {
 
               {/* Khối lưu ý phạm vi và tiếp nhận viết đầy đủ, đồng nhất */}
               <div className="bg-stone-50 p-3.5 rounded-xl border border-stone-200/80 text-xs text-stone-600 leading-relaxed mt-2">
+                <div className="font-bold text-[#B22222] mb-1 flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
+                  <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
+                  <span>Lưu ý:</span>
+                </div>
                 Hệ thống do Ủy ban MTTQ Việt Nam Phường Diên Hồng vận hành phục vụ công tác giám sát và phối hợp chính quyền địa phương giải quyết kiến nghị của bà con nhân dân. Trong các tình huống khẩn cấp về an ninh trật tự hoặc y tế, vui lòng liên hệ ngay 113, 114, 115 hoặc Công an Phường Diên Hồng (Số 592 Bà Hạt).
               </div>
             </div>
