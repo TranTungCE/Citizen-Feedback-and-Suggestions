@@ -169,23 +169,9 @@ function FooterContent() {
                 </Link>
               </div>
 
-              {/* Hộp liên hệ khẩn cấp tinh gọn tích hợp liền mạch ngay dưới */}
-              <div className="bg-red-50/70 p-3 rounded-xl border border-red-100 space-y-2 text-xs mt-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-[#B22222] font-bold text-[11px] uppercase">
-                    <PhoneCall className="w-3.5 h-3.5 shrink-0" />
-                    <span>Hỗ trợ khẩn cấp:</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-[11px]">
-                    <span className="px-1.5 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">113</span>
-                    <span className="px-1.5 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">114</span>
-                    <span className="px-1.5 py-0.5 bg-white font-mono font-bold text-red-700 rounded border border-red-200">115</span>
-                  </div>
-                </div>
-                <div className="text-[11px] text-stone-600 flex items-center justify-between pt-0.5 border-t border-red-100/60">
-                  <span>Công an Phường Diên Hồng: <strong>Số 592 Bà Hạt</strong></span>
-                  <span className="text-[10px] text-stone-500">Giám sát & Tiếp nhận MTTQ</span>
-                </div>
+              {/* Khối lưu ý phạm vi và tiếp nhận viết đầy đủ, đồng nhất */}
+              <div className="bg-stone-50 p-3.5 rounded-xl border border-stone-200/80 text-xs text-stone-600 leading-relaxed mt-2">
+                Hệ thống do Ủy ban MTTQ Việt Nam Phường Diên Hồng vận hành phục vụ công tác giám sát và phối hợp chính quyền địa phương giải quyết kiến nghị của bà con nhân dân. Trong các tình huống khẩn cấp về an ninh trật tự hoặc y tế, vui lòng liên hệ ngay 113, 114, 115 hoặc Công an Phường Diên Hồng (Số 592 Bà Hạt).
               </div>
             </div>
           </div>
