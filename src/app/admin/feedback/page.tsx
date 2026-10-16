@@ -10,7 +10,8 @@ import {
   Eye, 
   MapPin, 
   Calendar,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react';
 import { feedbackStore, STATUS_LABELS, PRIORITY_LABELS, DEFAULT_CATEGORIES } from '@/lib/feedback/store';
 import { formatVietnameseDateTime } from '@/lib/utils';
@@ -78,7 +79,7 @@ export default function FeedbackManagementPage() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `danh_sach_phan_anh_anthoidong_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `danh_sach_phan_anh_dienhong_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -96,13 +97,25 @@ export default function FeedbackManagementPage() {
           </p>
         </div>
 
-        <button
-          onClick={exportCSV}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition shadow"
-        >
-          <Download className="w-4 h-4" />
-          Xuất dữ liệu CSV
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={loadData}
+            disabled={loading}
+            className="inline-flex items-center gap-2 px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold rounded-lg transition border border-stone-300 disabled:opacity-50"
+            title="Đồng bộ dữ liệu mới nhất từ Supabase"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#8B0000]' : ''}`} />
+            {loading ? 'Đang đồng bộ...' : 'Đồng bộ Supabase'}
+          </button>
+
+          <button
+            onClick={exportCSV}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition shadow"
+          >
+            <Download className="w-4 h-4" />
+            Xuất dữ liệu CSV
+          </button>
+        </div>
       </div>
 
       {/* Bộ lọc và Tìm kiếm */}

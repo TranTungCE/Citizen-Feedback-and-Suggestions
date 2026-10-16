@@ -15,7 +15,8 @@ import {
   MessageSquare,
   FileText,
   Send,
-  ShieldCheck
+  ShieldCheck,
+  RefreshCw
 } from 'lucide-react';
 import { feedbackStore, STATUS_LABELS, PRIORITY_LABELS } from '@/lib/feedback/store';
 import { formatVietnameseDateTime } from '@/lib/utils';
@@ -160,6 +161,15 @@ function FeedbackDetailContent() {
           <ArrowLeft className="w-4 h-4" /> Quay lại danh sách phản ánh
         </Link>
         <div className="flex items-center gap-2">
+          <button
+            onClick={loadData}
+            disabled={loading}
+            className="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded border border-stone-300 transition disabled:opacity-50"
+            title="Đồng bộ dữ liệu mới nhất từ Supabase"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#8B0000]' : ''}`} />
+            {loading ? 'Đang đồng bộ...' : 'Đồng bộ'}
+          </button>
           <span className="font-mono text-sm font-bold text-[#8B0000] bg-red-50 border border-red-200 px-3 py-1 rounded">
             {item.tracking_code}
           </span>
